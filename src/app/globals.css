@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply text-black bg-white;
+    font-feature-settings: "kern";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar - Flone style */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-400;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-black;
+  }
+}
+
+@layer components {
+  /* Flone-inspired utility classes */
+  .btn-primary {
+    @apply bg-black text-white px-8 py-3 uppercase tracking-wider text-sm font-medium hover:bg-primary transition-all duration-300;
+  }
+
+  .btn-outline {
+    @apply border-2 border-black text-black px-8 py-3 uppercase tracking-wider text-sm font-medium hover:bg-black hover:text-white transition-all duration-300;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Flone-style text utilities */
+  .heading-serif {
+    @apply font-serif font-normal;
+  }
+
+  .text-uppercase {
+    @apply uppercase tracking-wider;
+  }
+}
