@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -23,6 +23,14 @@ export default function ImageCarousel({
   const [isHovered, setIsHovered] = useState(false)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
+  const handlePrevious = useCallback(() => {
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))
+  }, [images.length])
+
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))
+  }, [images.length])
+
   useEffect(() => {
     if (autoPlay && !isHovered) {
       timerRef.current = setInterval(() => {
@@ -35,15 +43,7 @@ export default function ImageCarousel({
         clearInterval(timerRef.current)
       }
     }
-  }, [autoPlay, isHovered, currentIndex])
-
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))
-  }
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))
-  }
+  }, [autoPlay, isHovered, interval, handleNext])
 
   const handleDotClick = (index: number) => {
     setCurrentIndex(index)

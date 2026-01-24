@@ -15,7 +15,7 @@ export default function ShopPage() {
   const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 15
+  const itemsPerPage = 12
 
   // Get unique categories from products
   const categories = Array.from(new Set(sampleProducts.map((p) => p.category)))
@@ -49,67 +49,63 @@ export default function ShopPage() {
   const paginatedProducts = sortedProducts.slice(startIndex, endIndex)
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-neutral-200">
-        <div className="container mx-auto px-4 py-6">
-          <nav className="flex items-center gap-2 text-xs">
-            <Link href="/" className="text-neutral-600 hover:text-neutral-900 transition-colors tracking-wider uppercase font-medium">
+    <div className="min-h-screen bg-white">
+      {/* Flone-style Breadcrumb */}
+      <div className="bg-[#f6f6f6]">
+        <div className="container mx-auto px-4 py-16 sm:py-20 text-center">
+          <h1 className="text-[32px] sm:text-[40px] font-bold text-[#000] mb-4">Shop</h1>
+          <nav className="flex items-center justify-center gap-2 text-[14px]">
+            <Link href="/" className="text-[#555] hover:text-[#a749ff] transition-colors">
               Home
             </Link>
-            <ChevronRight className="w-3 h-3 text-neutral-400" />
-            <span className="text-neutral-900 tracking-wider uppercase font-semibold">Shop</span>
+            <ChevronRight className="w-4 h-4 text-[#555]" />
+            <span className="text-[#a749ff]">Shop</span>
           </nav>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-10">
-        <div className="flex gap-10">
+      <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Filters Sidebar - Desktop */}
-          <aside className="hidden lg:block w-64 flex-shrink-0">
+          <aside className="hidden lg:block w-[270px] flex-shrink-0">
             <ProductFilters categories={categories} />
           </aside>
 
-          {/* Mobile Filters Toggle */}
-          <div className="lg:hidden mb-6 w-full">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="w-full flex items-center justify-between px-5 py-3 bg-white border border-neutral-300 text-sm font-semibold uppercase tracking-wide transition-colors hover:bg-neutral-50"
-            >
-              <span>Filters</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-            </button>
-            {showFilters && (
-              <div className="mt-4 bg-white border border-neutral-300 p-4">
-                <ProductFilters categories={categories} />
-              </div>
-            )}
-          </div>
-
-          {/* Products */}
+          {/* Products Section */}
           <div className="flex-1">
             {/* Toolbar */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4 pb-6 border-b border-neutral-200">
-              <div className="flex items-center gap-4">
-                <p className="text-xs text-neutral-600 tracking-wide uppercase">
-                  Showing {startIndex + 1}-{Math.min(endIndex, sortedProducts.length)} of {sortedProducts.length}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-10 gap-4 pb-6 border-b border-[#ebebeb]">
+              {/* Mobile Filters Toggle */}
+              <div className="lg:hidden w-full sm:w-auto">
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#f6f6f6] text-[#000] text-[14px] font-medium hover:bg-[#a749ff] hover:text-white transition-colors"
+                >
+                  <span>Filters</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <p className="text-[14px] text-[#555]">
+                  Showing {startIndex + 1}-{Math.min(endIndex, sortedProducts.length)} of {sortedProducts.length} results
                 </p>
               </div>
 
               <div className="flex items-center gap-4">
                 {/* View Mode Toggle */}
-                <div className="flex items-center border border-neutral-300">
+                <div className="flex items-center border border-[#ebebeb]">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`p-2.5 transition-colors ${viewMode === 'grid' ? 'bg-neutral-900 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100'}`}
+                    className={`p-2.5 transition-colors ${viewMode === 'grid' ? 'bg-[#a749ff] text-white' : 'bg-white text-[#555] hover:text-[#a749ff]'}`}
                     aria-label="Grid view"
                   >
                     <Grid className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`p-2.5 transition-colors ${viewMode === 'list' ? 'bg-neutral-900 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100'}`}
+                    className={`p-2.5 transition-colors ${viewMode === 'list' ? 'bg-[#a749ff] text-white' : 'bg-white text-[#555] hover:text-[#a749ff]'}`}
                     aria-label="List view"
                   >
                     <List className="w-4 h-4" />
@@ -122,25 +118,35 @@ export default function ShopPage() {
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
                   options={SORT_OPTIONS}
-                  className="w-48"
+                  className="w-[180px]"
                 />
               </div>
             </div>
 
+            {/* Mobile Filters Panel */}
+            {showFilters && (
+              <div className="lg:hidden mb-8 bg-[#f6f6f6] p-6">
+                <ProductFilters categories={categories} />
+              </div>
+            )}
+
             {/* Product Grid */}
             <ProductGrid products={paginatedProducts} columns={3} viewMode={viewMode} />
 
-            {/* Pagination */}
+            {/* Flone-style Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-12 pt-8 border-t border-neutral-200">
+              <div className="flex items-center justify-center gap-2 mt-12 sm:mt-16">
                 {Array.from({ length: Math.min(totalPages, 10) }, (_, i) => i + 1).map((page) => (
                   <button
                     key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`w-10 h-10 flex items-center justify-center text-sm font-semibold transition-colors ${
+                    onClick={() => {
+                      setCurrentPage(page)
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
+                    className={`w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-[14px] font-medium transition-all duration-300 ${
                       currentPage === page
-                        ? 'bg-neutral-900 text-white'
-                        : 'bg-white text-neutral-700 hover:bg-neutral-100 border border-neutral-300'
+                        ? 'bg-[#a749ff] text-white'
+                        : 'bg-[#f6f6f6] text-[#555] hover:bg-[#a749ff] hover:text-white'
                     }`}
                   >
                     {page}

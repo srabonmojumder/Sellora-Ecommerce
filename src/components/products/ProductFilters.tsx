@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { Search } from 'lucide-react'
-import { SIZE_OPTIONS } from '@/lib/constants'
 
 interface ProductFiltersProps {
   onFilterChange?: (filters: any) => void
@@ -10,44 +9,29 @@ interface ProductFiltersProps {
 }
 
 const ALL_CATEGORIES = [
-  'All Categories',
   'Fashion',
   'Men',
   'Women',
   'Electronics',
   'Furniture',
-  'Plant',
-  'Organic Food',
-  'Flower',
-  'Book',
-  'Cosmetics',
   'Accessories',
-  'Handmade',
   'Kids',
-  'Auto Parts',
-  'Cakes',
-  'Pet Food',
-  'Medical',
-  'Black Friday',
-  'Christmas'
+  'Cosmetics',
 ]
 
 const COLOR_OPTIONS = [
-  { name: 'All Colors', hex: '' },
   { name: 'White', hex: '#FFFFFF' },
   { name: 'Black', hex: '#000000' },
   { name: 'Brown', hex: '#8B4513' },
-  { name: 'Blue', hex: '#0000FF' }
+  { name: 'Blue', hex: '#0000FF' },
+  { name: 'Red', hex: '#FF0000' },
+  { name: 'Green', hex: '#008000' },
 ]
 
-const ALL_SIZES = ['All Sizes', 'X', 'M', 'L', 'XL', 'XXL']
+const ALL_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 
 const TAG_OPTIONS = [
-  'Fashion', 'Men', 'Jacket', 'Full Sleeve', 'Women', 'Coat',
-  'Top', 'Sleeveless', 'Electronics', 'Furniture', 'Plant',
-  'Organic Food', 'Flower', 'Book', 'Cosmetics', 'Accessories',
-  'Handmade', 'Kids', 'Auto Parts', 'Cakes', 'Pet Food',
-  'Medical', 'Black Friday', 'Christmas'
+  'Fashion', 'Lifestyle', 'Denim', 'Streetstyle', 'Crafts'
 ]
 
 export default function ProductFilters({ onFilterChange, categories = [] }: ProductFiltersProps) {
@@ -87,102 +71,110 @@ export default function ProductFilters({ onFilterChange, categories = [] }: Prod
   }
 
   return (
-    <div className="space-y-8 bg-white p-6 border border-neutral-200">
+    <div className="space-y-8">
       {/* Search */}
       <div>
-        <h3 className="text-xs font-bold text-neutral-900 mb-4 uppercase tracking-widest pb-3 border-b border-neutral-200">Search</h3>
+        <h3 className="text-[18px] font-semibold text-[#000] mb-5 pb-3 border-b border-[#ebebeb]">
+          Search
+        </h3>
         <div className="relative">
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Search here..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-neutral-300 focus:outline-none focus:border-neutral-900 text-sm transition-colors"
+            className="w-full px-4 py-3 pr-12 border border-[#ebebeb] text-[14px] text-[#333] focus:border-[#a749ff] focus:outline-none transition-colors"
           />
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+          <button className="absolute right-0 top-0 h-full px-4 bg-[#a749ff] text-white hover:bg-[#000] transition-colors">
+            <Search className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
       {/* Categories */}
       <div>
-        <h3 className="text-xs font-bold text-neutral-900 mb-4 uppercase tracking-widest pb-3 border-b border-neutral-200">Categories</h3>
-        <div className="space-y-3 max-h-64 overflow-y-auto">
+        <h3 className="text-[18px] font-semibold text-[#000] mb-5 pb-3 border-b border-[#ebebeb]">
+          Categories
+        </h3>
+        <ul className="space-y-3">
           {ALL_CATEGORIES.map((category) => (
-            <label key={category} className="flex items-center cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={selectedCategories.includes(category)}
-                onChange={() => handleCategoryToggle(category)}
-                className="w-4 h-4 text-neutral-900 border-neutral-400 focus:ring-neutral-900 focus:ring-offset-0"
-              />
-              <span className="ml-3 text-sm text-neutral-700 group-hover:text-neutral-900 transition-colors">
+            <li key={category}>
+              <button
+                onClick={() => handleCategoryToggle(category)}
+                className={`w-full text-left text-[14px] transition-colors flex items-center gap-2 ${
+                  selectedCategories.includes(category)
+                    ? 'text-[#a749ff] font-medium'
+                    : 'text-[#555] hover:text-[#a749ff]'
+                }`}
+              >
+                <span className={`w-2 h-2 rounded-full transition-colors ${
+                  selectedCategories.includes(category) ? 'bg-[#a749ff]' : 'bg-transparent'
+                }`} />
                 {category}
-              </span>
-            </label>
+              </button>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
 
       {/* Color */}
       <div>
-        <h3 className="text-xs font-bold text-neutral-900 mb-4 uppercase tracking-widest pb-3 border-b border-neutral-200">Color</h3>
-        <div className="space-y-3">
+        <h3 className="text-[18px] font-semibold text-[#000] mb-5 pb-3 border-b border-[#ebebeb]">
+          Color
+        </h3>
+        <div className="flex flex-wrap gap-2">
           {COLOR_OPTIONS.map((color) => (
-            <label key={color.name} className="flex items-center cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={selectedColors.includes(color.name)}
-                onChange={() => handleColorToggle(color.name)}
-                className="w-4 h-4 text-neutral-900 border-neutral-400 focus:ring-neutral-900 focus:ring-offset-0"
-              />
-              <div className="ml-3 flex items-center gap-2">
-                {color.hex && (
-                  <div
-                    className="w-5 h-5 border border-neutral-300"
-                    style={{ backgroundColor: color.hex }}
-                  />
-                )}
-                <span className="text-sm text-neutral-700 group-hover:text-neutral-900 transition-colors">
-                  {color.name}
-                </span>
-              </div>
-            </label>
+            <button
+              key={color.name}
+              onClick={() => handleColorToggle(color.name)}
+              className={`w-8 h-8 border-2 transition-all ${
+                selectedColors.includes(color.name)
+                  ? 'border-[#a749ff] scale-110'
+                  : 'border-[#ebebeb] hover:border-[#a749ff]'
+              }`}
+              style={{ backgroundColor: color.hex }}
+              title={color.name}
+            />
           ))}
         </div>
       </div>
 
       {/* Size */}
       <div>
-        <h3 className="text-xs font-bold text-neutral-900 mb-4 uppercase tracking-widest pb-3 border-b border-neutral-200">Size</h3>
-        <div className="space-y-3">
+        <h3 className="text-[18px] font-semibold text-[#000] mb-5 pb-3 border-b border-[#ebebeb]">
+          Size
+        </h3>
+        <div className="flex flex-wrap gap-2">
           {ALL_SIZES.map((size) => (
-            <label key={size} className="flex items-center cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={selectedSizes.includes(size)}
-                onChange={() => handleSizeToggle(size)}
-                className="w-4 h-4 text-neutral-900 border-neutral-400 focus:ring-neutral-900 focus:ring-offset-0"
-              />
-              <span className="ml-3 text-sm text-neutral-700 group-hover:text-neutral-900 transition-colors">
-                {size}
-              </span>
-            </label>
+            <button
+              key={size}
+              onClick={() => handleSizeToggle(size)}
+              className={`min-w-[40px] h-10 px-3 text-[13px] font-medium border transition-all ${
+                selectedSizes.includes(size)
+                  ? 'bg-[#a749ff] text-white border-[#a749ff]'
+                  : 'bg-white text-[#555] border-[#ebebeb] hover:bg-[#a749ff] hover:text-white hover:border-[#a749ff]'
+              }`}
+            >
+              {size}
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Tag */}
+      {/* Tags */}
       <div>
-        <h3 className="text-xs font-bold text-neutral-900 mb-4 uppercase tracking-widest pb-3 border-b border-neutral-200">Tag</h3>
+        <h3 className="text-[18px] font-semibold text-[#000] mb-5 pb-3 border-b border-[#ebebeb]">
+          Tags
+        </h3>
         <div className="flex flex-wrap gap-2">
           {TAG_OPTIONS.map((tag) => (
             <button
               key={tag}
               onClick={() => handleTagToggle(tag)}
-              className={`px-3 py-2 text-xs font-medium uppercase tracking-wide transition-colors border ${
+              className={`px-4 py-2 text-[13px] capitalize transition-all ${
                 selectedTags.includes(tag)
-                  ? 'bg-neutral-900 text-white border-neutral-900'
-                  : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-900 hover:text-white hover:border-neutral-900'
+                  ? 'bg-[#a749ff] text-white'
+                  : 'bg-[#f6f6f6] text-[#555] hover:bg-[#a749ff] hover:text-white'
               }`}
             >
               {tag}

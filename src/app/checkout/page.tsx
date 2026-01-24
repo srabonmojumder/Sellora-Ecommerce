@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { CreditCard, Truck, Lock } from 'lucide-react'
@@ -13,6 +13,7 @@ export default function CheckoutPage() {
   const router = useRouter()
   const { items, subtotal, tax, shipping, total } = useCart()
   const [isProcessing, setIsProcessing] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -25,6 +26,17 @@ export default function CheckoutPage() {
     zipCode: '',
     country: 'United States',
   })
+
+  // Handle mounting and redirect on client-side only
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (mounted && items.length === 0) {
+      router.push('/cart')
+    }
+  }, [mounted, items.length, router])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -45,9 +57,13 @@ export default function CheckoutPage() {
     }, 2000)
   }
 
-  if (items.length === 0) {
-    router.push('/cart')
-    return null
+  // Show loading state before mount or when cart is empty
+  if (!mounted || items.length === 0) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="animate-pulse text-neutral-500">Loading...</div>
+      </div>
+    )
   }
 
   return (

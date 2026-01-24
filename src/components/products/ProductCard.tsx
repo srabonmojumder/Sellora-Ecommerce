@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingCart, Heart, Eye, Repeat } from 'lucide-react'
+import { Heart, Eye, Shuffle } from 'lucide-react'
 import type { Product, ViewMode } from '@/types'
 import QuickView from '@/components/ui/QuickView'
 import { useCart } from '@/context/CartContext'
@@ -51,113 +51,114 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
   if (viewMode === 'list') {
     return (
       <>
-        <div
-          className="group block relative"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+        <div className="group block relative">
           <Link href={`/products/${product.slug}`} className="block relative">
-            <div className="flex gap-6 p-6 bg-white border border-neutral-200 hover:border-neutral-300 transition-all">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 bg-white border border-[#ebebeb] hover:shadow-lg transition-all duration-300">
               {/* Image */}
-              <div className="relative w-48 h-48 flex-shrink-0 bg-neutral-50 overflow-hidden">
+              <div
+                className="relative w-full sm:w-[250px] h-[250px] sm:h-[280px] flex-shrink-0 overflow-hidden"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
                 <Image
-                  src={product.images[0]}
+                  src={isHovered && product.images[1] ? product.images[1] : product.images[0]}
                   alt={product.name}
                   fill
-                  className="object-cover"
-                  sizes="192px"
+                  className="object-cover transition-transform duration-500"
+                  sizes="(max-width: 640px) 100vw, 250px"
                 />
-                {product.badge && (
-                  <div className="absolute top-3 left-3 bg-neutral-900 text-white px-3 py-1 text-[10px] uppercase tracking-widest font-semibold">
-                    {product.badge}
-                  </div>
-                )}
-                {discount > 0 && (
-                  <div className="absolute top-3 right-3 bg-white text-neutral-900 px-3 py-1 text-[10px] uppercase tracking-widest font-bold border border-neutral-900">
-                    -{discount}%
-                  </div>
-                )}
+
+                {/* Badges */}
+                <div className="absolute top-3 left-3 flex flex-col gap-2">
+                  {product.badge === 'new' && (
+                    <span className="bg-[#a749ff] text-white px-3 py-1 text-[11px] font-medium uppercase">
+                      New
+                    </span>
+                  )}
+                  {discount > 0 && (
+                    <span className="bg-[#a749ff] text-white px-3 py-1 text-[11px] font-medium">
+                      -{discount}%
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Content */}
-              <div className="flex-1 flex flex-col justify-between">
-                <div>
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold mb-2">
-                    {product.category}
-                  </div>
-                  <h3 className="text-xl font-semibold text-neutral-900 mb-2">
-                    {product.name}
-                  </h3>
-                  <p className="text-sm text-neutral-600 mb-4 line-clamp-2">
-                    {product.description}
-                  </p>
+              <div className="flex-1 p-4 sm:p-6 flex flex-col justify-center">
+                <h3 className="text-[18px] sm:text-[20px] font-medium text-[#000] hover:text-[#a749ff] transition-colors mb-2">
+                  {product.name}
+                </h3>
 
-                  {/* Rating */}
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="flex gap-0.5">
-                      {[...Array(5)].map((_, i) => (
-                        <svg
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < Math.floor(product.rating)
-                              ? 'text-neutral-900 fill-current'
-                              : 'text-neutral-300 fill-current'
-                          }`}
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <span className="text-sm text-neutral-600">
-                      ({product.reviews})
+                {/* Price */}
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-[18px] font-medium text-[#000]">
+                    {formatPrice(product.price)}
+                  </span>
+                  {product.comparePrice && (
+                    <span className="text-[16px] text-[#8e8e8e] line-through">
+                      {formatPrice(product.comparePrice)}
                     </span>
-                  </div>
+                  )}
                 </div>
 
-                {/* Price and Actions */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-semibold text-neutral-900">
-                      {formatPrice(product.price)}
-                    </span>
-                    {product.comparePrice && (
-                      <span className="text-sm text-neutral-400 line-through">
-                        {formatPrice(product.comparePrice)}
-                      </span>
-                    )}
+                {/* Rating */}
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <svg
+                        key={i}
+                        className={`w-4 h-4 ${
+                          i < Math.floor(product.rating)
+                            ? 'text-[#ffa900] fill-current'
+                            : 'text-[#d5d5d5] fill-current'
+                        }`}
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
                   </div>
+                  <span className="text-[13px] text-[#555]">({product.reviews} reviews)</span>
+                </div>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={handleToggleWishlist}
-                      className={`p-3 border transition-colors ${
-                        inWishlist
-                          ? 'bg-neutral-900 text-white border-neutral-900'
-                          : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-900 hover:text-white hover:border-neutral-900'
-                      }`}
-                    >
-                      <Heart className={`w-5 h-5 ${inWishlist ? 'fill-current' : ''}`} />
-                    </button>
-                    <button
-                      onClick={handleAddToCart}
-                      className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-colors ${
-                        inCartAlready
-                          ? 'bg-neutral-700 text-white'
-                          : 'bg-neutral-900 text-white hover:bg-neutral-800'
-                      }`}
-                    >
-                      <ShoppingCart className="w-5 h-5 inline-block mr-2" />
-                      {inCartAlready ? 'Added to Cart' : 'Add to Cart'}
-                    </button>
-                  </div>
+                <p className="text-[14px] text-[#555] mb-6 line-clamp-2">
+                  {product.description}
+                </p>
+
+                {/* Actions */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={handleAddToCart}
+                    className={`px-6 py-3 text-[13px] font-medium uppercase tracking-wide transition-all duration-300 ${
+                      inCartAlready
+                        ? 'bg-[#333] text-white'
+                        : 'bg-[#a749ff] text-white hover:bg-[#000]'
+                    }`}
+                  >
+                    {inCartAlready ? 'Added' : 'Add To Cart'}
+                  </button>
+                  <button
+                    onClick={handleToggleWishlist}
+                    className={`w-11 h-11 flex items-center justify-center border transition-all duration-300 ${
+                      inWishlist
+                        ? 'bg-[#a749ff] text-white border-[#a749ff]'
+                        : 'bg-white text-[#000] border-[#ebebeb] hover:bg-[#a749ff] hover:text-white hover:border-[#a749ff]'
+                    }`}
+                  >
+                    <Heart className={`w-4 h-4 ${inWishlist ? 'fill-current' : ''}`} />
+                  </button>
+                  <button
+                    onClick={handleQuickView}
+                    className="w-11 h-11 flex items-center justify-center bg-white text-[#000] border border-[#ebebeb] hover:bg-[#a749ff] hover:text-white hover:border-[#a749ff] transition-all duration-300"
+                  >
+                    <Eye className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             </div>
           </Link>
         </div>
 
-        {/* Quick View Modal */}
         <QuickView
           product={product}
           isOpen={showQuickView}
@@ -167,7 +168,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
     )
   }
 
-  // Grid view layout
+  // Grid view layout - Flone style
   return (
     <>
       <div
@@ -175,145 +176,165 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="bg-white border border-neutral-200 group-hover:border-neutral-300 transition-all duration-300 overflow-hidden">
+        <div className="bg-white overflow-hidden">
           <Link href={`/products/${product.slug}`} className="block relative">
-            {/* Classic Image Container */}
-            <div className="relative aspect-[3/4] bg-neutral-50 overflow-hidden">
+            {/* Image Container */}
+            <div className="relative aspect-[3/4] overflow-hidden bg-[#f6f6f6]">
+              {/* Main Image */}
               <Image
-                src={isHovered && product.images[1] ? product.images[1] : product.images[0]}
+                src={product.images[0]}
                 alt={product.name}
                 fill
-                className="object-cover transition-all duration-500 group-hover:scale-105"
+                className={`object-cover transition-all duration-500 ${
+                  isHovered && product.images[1] ? 'opacity-0' : 'opacity-100'
+                }`}
                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               />
 
-              {/* Subtle overlay on hover */}
-              <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              {/* Hover Image */}
+              {product.images[1] && (
+                <Image
+                  src={product.images[1]}
+                  alt={product.name}
+                  fill
+                  className={`object-cover transition-all duration-500 ${
+                    isHovered ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                />
+              )}
 
-              {/* Classic Badges */}
-              <div className="absolute top-3 left-3 flex flex-col gap-2 z-20">
-                {product.badge && (
-                  <div className="bg-neutral-900 text-white px-3 py-1 text-[10px] uppercase tracking-widest font-semibold">
-                    {product.badge}
-                  </div>
+              {/* Badges */}
+              <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+                {product.badge === 'new' && (
+                  <span className="bg-[#a749ff] text-white px-3 py-1 text-[11px] font-medium uppercase">
+                    New
+                  </span>
+                )}
+                {product.badge === 'sale' && (
+                  <span className="bg-[#a749ff] text-white px-3 py-1 text-[11px] font-medium uppercase">
+                    Sale
+                  </span>
                 )}
                 {discount > 0 && (
-                  <div className="bg-white text-neutral-900 px-3 py-1 text-[10px] uppercase tracking-widest font-bold border border-neutral-900">
+                  <span className="bg-[#a749ff] text-white px-3 py-1 text-[11px] font-medium">
                     -{discount}%
-                  </div>
+                  </span>
                 )}
               </div>
 
-              {/* Classic Quick Actions */}
-              <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 sm:group-hover:opacity-100 transition-all duration-300 z-20">
+              {/* Flone-style Action Icons - Appear from right on hover */}
+              <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
                 <button
                   onClick={handleToggleWishlist}
-                  className={`w-10 h-10 flex items-center justify-center transition-all duration-200 border ${
+                  className={`w-10 h-10 flex items-center justify-center rounded-full shadow-md transition-all duration-300 ${
+                    isHovered ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
+                  } ${
                     inWishlist
-                      ? 'bg-neutral-900 text-white border-neutral-900'
-                      : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-900 hover:text-white hover:border-neutral-900'
+                      ? 'bg-[#a749ff] text-white'
+                      : 'bg-white text-[#000] hover:bg-[#a749ff] hover:text-white'
                   }`}
-                  aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+                  style={{ transitionDelay: '0ms' }}
+                  title={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
                 >
                   <Heart className={`w-4 h-4 ${inWishlist ? 'fill-current' : ''}`} />
                 </button>
+
                 <button
                   onClick={handleQuickView}
-                  className="w-10 h-10 bg-white border border-neutral-300 flex items-center justify-center text-neutral-700 hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all duration-200"
-                  aria-label="Quick view"
+                  className={`w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#000] shadow-md hover:bg-[#a749ff] hover:text-white transition-all duration-300 ${
+                    isHovered ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
+                  }`}
+                  style={{ transitionDelay: '50ms' }}
+                  title="Quick View"
                 >
                   <Eye className="w-4 h-4" />
                 </button>
+
                 <button
-                  className="w-10 h-10 bg-white border border-neutral-300 flex items-center justify-center text-neutral-700 hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all duration-200"
-                  aria-label="Compare"
+                  className={`w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#000] shadow-md hover:bg-[#a749ff] hover:text-white transition-all duration-300 ${
+                    isHovered ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
+                  }`}
+                  style={{ transitionDelay: '100ms' }}
+                  title="Compare"
                 >
-                  <Repeat className="w-4 h-4" />
+                  <Shuffle className="w-4 h-4" />
                 </button>
               </div>
 
-              {/* Classic Add to Cart Button - Desktop */}
-              <button
-                onClick={handleAddToCart}
-                className={`hidden sm:flex absolute bottom-0 left-0 right-0 text-white py-4 px-4 items-center justify-center gap-2 font-semibold text-sm uppercase tracking-wide transition-all duration-300 ${
+              {/* Add to Cart Button - Slides up from bottom on hover */}
+              <div
+                className={`absolute bottom-0 left-0 right-0 transition-all duration-300 ${
                   isHovered ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
-                } ${
-                  inCartAlready
-                    ? 'bg-neutral-700'
-                    : 'bg-neutral-900 hover:bg-neutral-800'
                 }`}
               >
-                <ShoppingCart className="w-4 h-4" />
-                <span>{inCartAlready ? 'Added to Cart' : 'Add to Cart'}</span>
-              </button>
+                <button
+                  onClick={handleAddToCart}
+                  className={`w-full py-3 sm:py-4 text-[13px] font-medium uppercase tracking-wide transition-colors duration-300 ${
+                    inCartAlready
+                      ? 'bg-[#333] text-white'
+                      : 'bg-[#a749ff] text-white hover:bg-[#000]'
+                  }`}
+                >
+                  {inCartAlready ? 'Added to Cart' : 'Add To Cart'}
+                </button>
+              </div>
             </div>
 
-            {/* Classic Product Info */}
-            <div className="p-4 sm:p-5 relative bg-white">
-              {/* Category */}
-              <div className="mb-2">
-                <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold">
-                  {product.category}
-                </span>
-              </div>
-
+            {/* Product Info */}
+            <div className="pt-4 pb-2 text-center">
               {/* Product Name */}
-              <h3 className="font-semibold text-neutral-900 mb-3 line-clamp-2 text-base leading-snug">
+              <h3 className="text-[16px] font-medium text-[#000] hover:text-[#a749ff] transition-colors mb-2 line-clamp-1">
                 {product.name}
               </h3>
 
-              {/* Classic Rating */}
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex gap-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <svg
-                      key={i}
-                      className={`w-3.5 h-3.5 ${
-                        i < Math.floor(product.rating)
-                          ? 'text-neutral-900 fill-current'
-                          : 'text-neutral-300 fill-current'
-                      }`}
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <span className="text-xs text-neutral-600">
-                  ({product.reviews})
-                </span>
-              </div>
-
-              {/* Classic Price display */}
-              <div className="flex items-baseline gap-2 mb-3 sm:mb-0">
-                <span className="text-xl font-semibold text-neutral-900">
+              {/* Price */}
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-[16px] font-medium text-[#000]">
                   {formatPrice(product.price)}
                 </span>
                 {product.comparePrice && (
-                  <span className="text-sm text-neutral-400 line-through">
+                  <span className="text-[14px] text-[#8e8e8e] line-through">
                     {formatPrice(product.comparePrice)}
                   </span>
                 )}
               </div>
 
-              {/* Classic Add to Cart Button - Mobile */}
-              <button
-                onClick={handleAddToCart}
-                className={`sm:hidden w-full text-white py-3 px-4 flex items-center justify-center gap-2 font-semibold text-sm uppercase tracking-wide transition-all duration-200 mt-4 ${
-                  inCartAlready
-                    ? 'bg-neutral-700'
-                    : 'bg-neutral-900 hover:bg-neutral-800'
-                }`}
-              >
-                <ShoppingCart className="w-4 h-4" />
-                <span>{inCartAlready ? 'Added to Cart' : 'Add to Cart'}</span>
-              </button>
+              {/* Rating - Optional, can be hidden for cleaner look */}
+              <div className="flex items-center justify-center gap-1 mt-2">
+                {[...Array(5)].map((_, i) => (
+                  <svg
+                    key={i}
+                    className={`w-3.5 h-3.5 ${
+                      i < Math.floor(product.rating)
+                        ? 'text-[#ffa900] fill-current'
+                        : 'text-[#d5d5d5] fill-current'
+                    }`}
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
             </div>
           </Link>
+
+          {/* Mobile Add to Cart - Always visible on mobile */}
+          <div className="sm:hidden px-4 pb-4">
+            <button
+              onClick={handleAddToCart}
+              className={`w-full py-3 text-[13px] font-medium uppercase tracking-wide transition-colors duration-300 ${
+                inCartAlready
+                  ? 'bg-[#333] text-white'
+                  : 'bg-[#a749ff] text-white hover:bg-[#000]'
+              }`}
+            >
+              {inCartAlready ? 'Added to Cart' : 'Add To Cart'}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Quick View Modal */}
       <QuickView
         product={product}
         isOpen={showQuickView}

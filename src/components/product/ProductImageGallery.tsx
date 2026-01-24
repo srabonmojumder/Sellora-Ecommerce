@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Maximize2, Image as ImageIcon, RotateCw } from 'lucide-react'
 import ImageZoom from './ImageZoom'
 import Lightbox from './Lightbox'
@@ -129,10 +130,11 @@ export default function ProductImageGallery({
                       : 'border-transparent hover:border-neutral-300'
                   }`}
                 >
-                  <img
+                  <Image
                     src={image}
                     alt={`${productName} - Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 </button>
               ))}

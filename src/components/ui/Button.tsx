@@ -24,24 +24,24 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]'
+      'inline-flex items-center justify-center font-semibold transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider'
 
     const variants = {
       primary:
-        'bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500 shadow-sm hover:shadow-md',
+        'bg-[#a749ff] text-white hover:bg-[#000]',
       secondary:
-        'bg-primary-800 text-white hover:bg-primary-900 focus:ring-primary-700 shadow-sm hover:shadow-md',
+        'bg-[#000] text-white hover:bg-[#a749ff]',
       outline:
-        'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 focus:ring-gray-300',
+        'border border-[#ebebeb] text-[#000] hover:bg-[#a749ff] hover:text-white hover:border-[#a749ff]',
       ghost:
-        'text-gray-700 hover:bg-gray-100 focus:ring-gray-300',
-      link: 'text-secondary-600 hover:text-secondary-700 underline-offset-4 hover:underline focus:ring-0',
+        'text-[#000] hover:text-[#a749ff] hover:bg-[#f6f6f6]',
+      link: 'text-[#a749ff] hover:text-[#000] underline-offset-4 hover:underline',
     }
 
     const sizes = {
-      sm: 'px-4 py-2 text-sm',
-      md: 'px-6 py-2.5 text-base',
-      lg: 'px-8 py-3 text-lg',
+      sm: 'px-6 py-2.5 text-[12px]',
+      md: 'px-8 py-3 text-[13px]',
+      lg: 'px-10 py-3.5 text-[14px]',
     }
 
     return (

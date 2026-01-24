@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react'
 
@@ -21,6 +21,16 @@ export default function Lightbox({
 }: LightboxProps) {
   const [activeIndex, setActiveIndex] = useState(currentIndex)
   const [zoom, setZoom] = useState(1)
+
+  const handlePrevious = useCallback(() => {
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))
+    setZoom(1)
+  }, [images.length])
+
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))
+    setZoom(1)
+  }, [images.length])
 
   useEffect(() => {
     setActiveIndex(currentIndex)
@@ -54,17 +64,7 @@ export default function Lightbox({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, activeIndex])
-
-  const handlePrevious = () => {
-    setActiveIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))
-    setZoom(1)
-  }
-
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))
-    setZoom(1)
-  }
+  }, [isOpen, onClose, handlePrevious, handleNext])
 
   const handleZoomIn = () => {
     setZoom((prev) => Math.min(prev + 0.5, 3))
