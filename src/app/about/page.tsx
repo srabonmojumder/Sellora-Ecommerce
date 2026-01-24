@@ -12,7 +12,7 @@ export default function AboutPage() {
               About Sellora
             </h1>
             <p className="text-xl text-neutral-300 leading-relaxed">
-              We're passionate about bringing you premium quality products that enhance your lifestyle. Our mission is to make online shopping a delightful experience.
+              We&apos;re passionate about bringing you premium quality products that enhance your lifestyle. Our mission is to make online shopping a delightful experience.
             </p>
           </div>
         </div>
@@ -34,7 +34,7 @@ export default function AboutPage() {
                   We carefully curate every product in our collection, working directly with manufacturers and artisans to ensure the highest standards. Our team is dedicated to discovering unique items that bring value and joy to your everyday life.
                 </p>
                 <p>
-                  Today, Sellora stands as a testament to our commitment to excellence. We're not just selling products; we're building relationships and creating experiences that our customers love and trust.
+                  Today, Sellora stands as a testament to our commitment to excellence. We&apos;re not just selling products; we&apos;re building relationships and creating experiences that our customers love and trust.
                 </p>
               </div>
             </div>
@@ -83,7 +83,7 @@ export default function AboutPage() {
                 Customer Love
               </h3>
               <p className="text-neutral-600">
-                Your satisfaction is our priority. We're here to help every step of the way.
+                Your satisfaction is our priority. We&apos;re here to help every step of the way.
               </p>
             </div>
 

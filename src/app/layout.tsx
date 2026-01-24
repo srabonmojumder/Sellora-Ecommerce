@@ -1,15 +1,19 @@
 import type { Metadata } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import { Poppins, Playfair_Display } from 'next/font/google'
 import { SITE_CONFIG } from '@/lib/constants'
 import { CartProvider } from '@/context/CartContext'
 import { WishlistProvider } from '@/context/WishlistContext'
+import { ToastProvider } from '@/context/ToastContext'
+import { CurrencyProvider } from '@/context/CurrencyContext'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import ToastContainer from '@/components/ui/ToastContainer'
 import './globals.css'
 
-const inter = Inter({
+const poppins = Poppins({
   subsets: ['latin'],
-  variable: '--font-inter',
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-poppins',
   display: 'swap',
 })
 
@@ -74,17 +78,22 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="font-sans antialiased bg-neutral-50">
-        <CartProvider>
-          <WishlistProvider>
-            <Navbar />
-            <main className="min-h-screen pt-[116px]">
-              {children}
-            </main>
-            <Footer />
-          </WishlistProvider>
-        </CartProvider>
+    <html lang="en" className={`${poppins.variable} ${playfair.variable}`}>
+      <body className="font-sans antialiased bg-white">
+        <ToastProvider>
+          <CurrencyProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <Navbar />
+                <main className="min-h-screen pt-[116px] relative">
+                  {children}
+                </main>
+                <Footer />
+                <ToastContainer />
+              </WishlistProvider>
+            </CartProvider>
+          </CurrencyProvider>
+        </ToastProvider>
       </body>
     </html>
   )
