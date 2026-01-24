@@ -43,7 +43,7 @@ export default function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block mb-6">
               <h2 className="text-[28px] font-bold text-[#000] hover:text-[#a749ff] transition-colors">
-                Flone
+                Sellora
               </h2>
             </Link>
             <p className="text-[#555] text-[14px] leading-relaxed mb-6">
@@ -144,8 +144,8 @@ export default function Footer() {
               </li>
               <li className="text-[#555] text-[14px]">
                 <span className="block text-[#000] font-medium mb-1">Email:</span>
-                <a href="mailto:info@flone.com" className="hover:text-[#a749ff] transition-colors">
-                  info@flone.com
+                <a href="mailto:info@sellora.com" className="hover:text-[#a749ff] transition-colors">
+                  info@sellora.com
                 </a>
               </li>
             </ul>
@@ -158,7 +158,7 @@ export default function Footer() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-[#555] text-[14px] text-center sm:text-left">
-              &copy; {currentYear} <span className="text-[#a749ff] font-medium">Flone</span>. All Rights Reserved.
+              &copy; {currentYear} <span className="text-[#a749ff] font-medium">Sellora</span>. All Rights Reserved.
             </p>
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
               {FOOTER_LINKS.legal.map((link) => (

@@ -72,7 +72,7 @@ export default function Navbar() {
               {/* Logo */}
               <Link href="/" className="flex-shrink-0">
                 <h1 className="text-[28px] sm:text-[32px] font-bold text-[#000] tracking-tight hover:text-[#a749ff] transition-colors">
-                  Flone
+                  Sellora
                 </h1>
               </Link>
 

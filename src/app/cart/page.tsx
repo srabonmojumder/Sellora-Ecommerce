@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Minus, Plus, X, ShoppingBag } from 'lucide-react'
+import { Minus, Plus, X, ShoppingBag, ChevronRight } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import { useCart } from '@/context/CartContext'
 import { formatPrice } from '@/lib/utils'
@@ -12,13 +12,27 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="text-center">
-          <ShoppingBag className="w-24 h-24 text-neutral-300 mx-auto mb-6" />
-          <h1 className="text-3xl font-display font-bold text-neutral-900 mb-4">
+      <div className="min-h-screen bg-white">
+        {/* Breadcrumb */}
+        <div className="bg-[#f6f6f6]">
+          <div className="container mx-auto px-4 py-16 sm:py-20 text-center">
+            <h1 className="text-[32px] sm:text-[40px] font-bold text-[#000] mb-4">Shopping Cart</h1>
+            <nav className="flex items-center justify-center gap-2 text-[14px]">
+              <Link href="/" className="text-[#555] hover:text-[#a749ff] transition-colors">
+                Home
+              </Link>
+              <ChevronRight className="w-4 h-4 text-[#555]" />
+              <span className="text-[#a749ff]">Cart</span>
+            </nav>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 py-20 text-center">
+          <ShoppingBag className="w-24 h-24 text-[#d5d5d5] mx-auto mb-6" />
+          <h2 className="text-[28px] font-bold text-[#000] mb-4">
             Your cart is empty
-          </h1>
-          <p className="text-neutral-600 mb-8">
+          </h2>
+          <p className="text-[15px] text-[#555] mb-8">
             Looks like you haven&apos;t added any items to your cart yet.
           </p>
           <Link href="/shop">
@@ -30,153 +44,184 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      {/* Page Header */}
-      <div className="bg-white border-b border-neutral-200 py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-display font-bold text-neutral-900 mb-3">
-            Shopping Cart
-          </h1>
-          <p className="text-neutral-600">
-            {itemCount} {itemCount === 1 ? 'item' : 'items'} in your cart
-          </p>
+    <div className="min-h-screen bg-white">
+      {/* Breadcrumb Header */}
+      <div className="bg-[#f6f6f6]">
+        <div className="container mx-auto px-4 py-16 sm:py-20 text-center">
+          <h1 className="text-[32px] sm:text-[40px] font-bold text-[#000] mb-4">Shopping Cart</h1>
+          <nav className="flex items-center justify-center gap-2 text-[14px]">
+            <Link href="/" className="text-[#555] hover:text-[#a749ff] transition-colors">
+              Home
+            </Link>
+            <ChevronRight className="w-4 h-4 text-[#555]" />
+            <span className="text-[#a749ff]">Cart</span>
+          </nav>
         </div>
       </div>
 
       {/* Cart Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Cart Items */}
-          <div className="lg:col-span-2 space-y-4">
-            {items.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white rounded-lg p-6 shadow-soft"
-              >
-                <div className="flex gap-6">
-                  {/* Product Image */}
-                  <div className="relative w-32 h-32 bg-neutral-100 rounded-lg overflow-hidden flex-shrink-0">
-                    <Image
-                      src={item.product.images[0]}
-                      alt={item.product.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+          <div className="lg:col-span-2">
+            {/* Cart Table Header - Desktop */}
+            <div className="hidden sm:grid grid-cols-12 gap-4 pb-4 border-b border-[#ebebeb] mb-6">
+              <div className="col-span-6 text-[14px] font-semibold text-[#000] uppercase tracking-wide">
+                Product
+              </div>
+              <div className="col-span-2 text-[14px] font-semibold text-[#000] uppercase tracking-wide text-center">
+                Price
+              </div>
+              <div className="col-span-2 text-[14px] font-semibold text-[#000] uppercase tracking-wide text-center">
+                Quantity
+              </div>
+              <div className="col-span-2 text-[14px] font-semibold text-[#000] uppercase tracking-wide text-right">
+                Total
+              </div>
+            </div>
 
-                  {/* Product Details */}
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <Link
-                          href={`/products/${item.product.slug}`}
-                          className="text-lg font-semibold text-neutral-900 hover:text-primary-500 transition-colors"
-                        >
-                          {item.product.name}
-                        </Link>
-                        <p className="text-sm text-neutral-600 mt-1">
-                          {item.product.category}
-                        </p>
-                      </div>
+            {/* Cart Items */}
+            <div className="space-y-6">
+              {items.map((item) => (
+                <div
+                  key={item.id}
+                  className="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 pb-6 border-b border-[#ebebeb] items-center"
+                >
+                  {/* Product Info */}
+                  <div className="sm:col-span-6 flex gap-4">
+                    <div className="relative w-24 h-24 sm:w-28 sm:h-28 bg-[#f6f6f6] flex-shrink-0 overflow-hidden">
+                      <Image
+                        src={item.product.images[0]}
+                        alt={item.product.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-col justify-center">
+                      <Link
+                        href={`/products/${item.product.slug}`}
+                        className="text-[16px] font-medium text-[#000] hover:text-[#a749ff] transition-colors mb-1"
+                      >
+                        {item.product.name}
+                      </Link>
+                      <p className="text-[13px] text-[#555] mb-2">
+                        {item.product.category}
+                      </p>
+                      {(item.selectedSize || item.selectedColor) && (
+                        <div className="flex gap-3 text-[13px] text-[#555]">
+                          {item.selectedSize && <span>Size: {item.selectedSize}</span>}
+                          {item.selectedColor && <span>Color: {item.selectedColor}</span>}
+                        </div>
+                      )}
                       <button
                         onClick={() => removeFromCart(item.id)}
-                        className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+                        className="mt-2 text-[13px] text-[#555] hover:text-[#a749ff] transition-colors flex items-center gap-1 sm:hidden"
                       >
-                        <X className="w-5 h-5 text-neutral-500" />
+                        <X className="w-4 h-4" />
+                        Remove
                       </button>
                     </div>
+                  </div>
 
-                    {/* Variations */}
-                    {(item.selectedSize || item.selectedColor) && (
-                      <div className="flex gap-4 mb-4 text-sm">
-                        {item.selectedSize && (
-                          <span className="text-neutral-600">
-                            Size: <span className="font-medium text-neutral-900">{item.selectedSize}</span>
-                          </span>
-                        )}
-                        {item.selectedColor && (
-                          <span className="text-neutral-600">
-                            Color: <span className="font-medium text-neutral-900">{item.selectedColor}</span>
-                          </span>
-                        )}
-                      </div>
-                    )}
+                  {/* Price */}
+                  <div className="sm:col-span-2 text-center hidden sm:block">
+                    <span className="text-[15px] text-[#000]">
+                      {formatPrice(item.product.price)}
+                    </span>
+                  </div>
 
-                    {/* Quantity & Price */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="w-8 h-8 border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors flex items-center justify-center"
-                        >
-                          <Minus className="w-4 h-4" />
-                        </button>
-                        <span className="w-12 text-center font-medium">{item.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="w-8 h-8 border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors flex items-center justify-center"
-                        >
-                          <Plus className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xl font-bold text-neutral-900">
-                          {formatPrice(item.product.price * item.quantity)}
-                        </p>
-                        <p className="text-sm text-neutral-500">
-                          {formatPrice(item.product.price)} each
-                        </p>
-                      </div>
+                  {/* Quantity */}
+                  <div className="sm:col-span-2 flex justify-center">
+                    <div className="flex items-center border border-[#ebebeb]">
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        className="w-10 h-10 flex items-center justify-center text-[#555] hover:text-[#a749ff] hover:bg-[#f6f6f6] transition-colors"
+                      >
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="w-12 text-center text-[15px] font-medium text-[#000]">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        className="w-10 h-10 flex items-center justify-center text-[#555] hover:text-[#a749ff] hover:bg-[#f6f6f6] transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
+
+                  {/* Total & Remove */}
+                  <div className="sm:col-span-2 flex items-center justify-between sm:justify-end gap-4">
+                    <span className="text-[16px] font-semibold text-[#000]">
+                      {formatPrice(item.product.price * item.quantity)}
+                    </span>
+                    <button
+                      onClick={() => removeFromCart(item.id)}
+                      className="hidden sm:flex w-8 h-8 items-center justify-center text-[#555] hover:text-[#a749ff] transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Continue Shopping */}
+            <div className="mt-8">
+              <Link
+                href="/shop"
+                className="text-[14px] text-[#555] hover:text-[#a749ff] transition-colors inline-flex items-center gap-2"
+              >
+                <ChevronRight className="w-4 h-4 rotate-180" />
+                Continue Shopping
+              </Link>
+            </div>
           </div>
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg p-6 shadow-soft sticky top-24">
-              <h2 className="text-xl font-semibold text-neutral-900 mb-6">
-                Order Summary
+            <div className="bg-[#f6f6f6] p-6 sm:p-8 sticky top-36">
+              <h2 className="text-[20px] font-bold text-[#000] mb-6 pb-4 border-b border-[#ebebeb]">
+                Cart Totals
               </h2>
 
               <div className="space-y-4 mb-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-neutral-600">Subtotal</span>
-                  <span className="font-medium text-neutral-900">
+                  <span className="text-[15px] text-[#555]">Subtotal</span>
+                  <span className="text-[15px] font-medium text-[#000]">
                     {formatPrice(subtotal)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-neutral-600">Shipping</span>
-                  <span className="font-medium text-neutral-900">
+                  <span className="text-[15px] text-[#555]">Shipping</span>
+                  <span className="text-[15px] font-medium text-[#000]">
                     {shipping === 0 ? 'Free' : formatPrice(shipping)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-neutral-600">Tax (10%)</span>
-                  <span className="font-medium text-neutral-900">
+                  <span className="text-[15px] text-[#555]">Tax (10%)</span>
+                  <span className="text-[15px] font-medium text-[#000]">
                     {formatPrice(tax)}
                   </span>
                 </div>
-                <div className="border-t border-neutral-200 pt-4">
+                <div className="border-t border-[#ebebeb] pt-4 mt-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-lg font-semibold text-neutral-900">Total</span>
-                    <span className="text-2xl font-bold text-neutral-900">
+                    <span className="text-[18px] font-bold text-[#000]">Total</span>
+                    <span className="text-[22px] font-bold text-[#a749ff]">
                       {formatPrice(total)}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <Link href="/checkout">
-                <Button size="lg" fullWidth className="mb-4">
+              <Link href="/checkout" className="block mb-4">
+                <Button size="lg" fullWidth>
                   Proceed to Checkout
                 </Button>
               </Link>
 
-              <Link href="/shop">
+              <Link href="/shop" className="block">
                 <Button variant="outline" size="lg" fullWidth>
                   Continue Shopping
                 </Button>
@@ -184,9 +229,9 @@ export default function CartPage() {
 
               {/* Free Shipping Notice */}
               {shipping > 0 && subtotal < 100 && (
-                <div className="mt-6 p-4 bg-primary-50 rounded-lg">
-                  <p className="text-sm text-primary-700">
-                    Add {formatPrice(100 - subtotal)} more to get free shipping!
+                <div className="mt-4 p-4 bg-white border border-[#ebebeb]">
+                  <p className="text-[13px] text-[#555]">
+                    Add <span className="font-semibold text-[#a749ff]">{formatPrice(100 - subtotal)}</span> more to get free shipping!
                   </p>
                 </div>
               )}

@@ -10,9 +10,9 @@ export default function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link
       href={`/categories/${category.slug}`}
-      className="group block bg-white rounded-lg overflow-hidden shadow-soft hover:shadow-hover transition-all duration-300"
+      className="group block bg-white overflow-hidden hover:shadow-lg transition-shadow"
     >
-      <div className="relative aspect-square overflow-hidden bg-neutral-100">
+      <div className="relative aspect-square overflow-hidden bg-[#f6f6f6]">
         <Image
           src={category.image}
           alt={category.name}
@@ -22,10 +22,10 @@ export default function CategoryCard({ category }: CategoryCardProps) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-          <h3 className="text-2xl font-display font-bold mb-1">
+          <h3 className="text-[22px] font-bold mb-1 group-hover:text-[#a749ff] transition-colors">
             {category.name}
           </h3>
-          <p className="text-sm text-white/90">
+          <p className="text-[14px] text-white/90">
             {category.productCount} Products
           </p>
         </div>
