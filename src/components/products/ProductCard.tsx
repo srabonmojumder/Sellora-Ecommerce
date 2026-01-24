@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingCart, Heart, Eye, Repeat } from 'lucide-react'
-import type { Product } from '@/types'
+import type { Product, ViewMode } from '@/types'
 import QuickView from '@/components/ui/QuickView'
 import { useCart } from '@/context/CartContext'
 import { useWishlist } from '@/context/WishlistContext'
@@ -12,9 +12,10 @@ import { formatPrice, calculateDiscount } from '@/lib/utils'
 
 interface ProductCardProps {
   product: Product
+  viewMode?: ViewMode
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, viewMode = 'grid' }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [showQuickView, setShowQuickView] = useState(false)
   const { addToCart, isInCart } = useCart()
@@ -46,6 +47,127 @@ export default function ProductCard({ product }: ProductCardProps) {
     setShowQuickView(true)
   }
 
+  // List view layout
+  if (viewMode === 'list') {
+    return (
+      <>
+        <div
+          className="group block relative"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <Link href={`/products/${product.slug}`} className="block relative">
+            <div className="flex gap-6 p-6 bg-white border border-neutral-200 hover:border-neutral-300 transition-all">
+              {/* Image */}
+              <div className="relative w-48 h-48 flex-shrink-0 bg-neutral-50 overflow-hidden">
+                <Image
+                  src={product.images[0]}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                  sizes="192px"
+                />
+                {product.badge && (
+                  <div className="absolute top-3 left-3 bg-neutral-900 text-white px-3 py-1 text-[10px] uppercase tracking-widest font-semibold">
+                    {product.badge}
+                  </div>
+                )}
+                {discount > 0 && (
+                  <div className="absolute top-3 right-3 bg-white text-neutral-900 px-3 py-1 text-[10px] uppercase tracking-widest font-bold border border-neutral-900">
+                    -{discount}%
+                  </div>
+                )}
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold mb-2">
+                    {product.category}
+                  </div>
+                  <h3 className="text-xl font-semibold text-neutral-900 mb-2">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-neutral-600 mb-4 line-clamp-2">
+                    {product.description}
+                  </p>
+
+                  {/* Rating */}
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="flex gap-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className={`w-4 h-4 ${
+                            i < Math.floor(product.rating)
+                              ? 'text-neutral-900 fill-current'
+                              : 'text-neutral-300 fill-current'
+                          }`}
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <span className="text-sm text-neutral-600">
+                      ({product.reviews})
+                    </span>
+                  </div>
+                </div>
+
+                {/* Price and Actions */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-semibold text-neutral-900">
+                      {formatPrice(product.price)}
+                    </span>
+                    {product.comparePrice && (
+                      <span className="text-sm text-neutral-400 line-through">
+                        {formatPrice(product.comparePrice)}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleToggleWishlist}
+                      className={`p-3 border transition-colors ${
+                        inWishlist
+                          ? 'bg-neutral-900 text-white border-neutral-900'
+                          : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-900 hover:text-white hover:border-neutral-900'
+                      }`}
+                    >
+                      <Heart className={`w-5 h-5 ${inWishlist ? 'fill-current' : ''}`} />
+                    </button>
+                    <button
+                      onClick={handleAddToCart}
+                      className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-colors ${
+                        inCartAlready
+                          ? 'bg-neutral-700 text-white'
+                          : 'bg-neutral-900 text-white hover:bg-neutral-800'
+                      }`}
+                    >
+                      <ShoppingCart className="w-5 h-5 inline-block mr-2" />
+                      {inCartAlready ? 'Added to Cart' : 'Add to Cart'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* Quick View Modal */}
+        <QuickView
+          product={product}
+          isOpen={showQuickView}
+          onClose={() => setShowQuickView(false)}
+        />
+      </>
+    )
+  }
+
+  // Grid view layout
   return (
     <>
       <div
@@ -53,143 +175,138 @@ export default function ProductCard({ product }: ProductCardProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="card-3d group-hover:shadow-2xl transition-all duration-500 rounded-3xl border-2 border-gray-100 group-hover:border-white overflow-hidden">
-          {/* Glow effect on hover */}
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 rounded-3xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500" />
-
+        <div className="bg-white border border-neutral-200 group-hover:border-neutral-300 transition-all duration-300 overflow-hidden">
           <Link href={`/products/${product.slug}`} className="block relative">
-            {/* Image Container with modern effects */}
-            <div className="relative aspect-[3/4] bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+            {/* Classic Image Container */}
+            <div className="relative aspect-[3/4] bg-neutral-50 overflow-hidden">
               <Image
                 src={isHovered && product.images[1] ? product.images[1] : product.images[0]}
                 alt={product.name}
                 fill
-                className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+                className="object-cover transition-all duration-500 group-hover:scale-105"
                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               />
 
-              {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Subtle overlay on hover */}
+              <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-              {/* Modern Badges with glow */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
+              {/* Classic Badges */}
+              <div className="absolute top-3 left-3 flex flex-col gap-2 z-20">
                 {product.badge && (
-                  <div className="badge-primary px-3 py-1.5 rounded-xl shadow-lg backdrop-blur-xl animate-slide-right">
-                    <span className="font-black text-xs uppercase tracking-wider">{product.badge}</span>
+                  <div className="bg-neutral-900 text-white px-3 py-1 text-[10px] uppercase tracking-widest font-semibold">
+                    {product.badge}
                   </div>
                 )}
                 {discount > 0 && (
-                  <div className="bg-gradient-to-r from-danger via-secondary-600 to-danger text-white px-3 py-1.5 rounded-xl shadow-lg backdrop-blur-xl font-black text-xs uppercase tracking-wider animate-slide-right animate-pulse-soft"
-                       style={{ animationDelay: '0.1s' }}>
+                  <div className="bg-white text-neutral-900 px-3 py-1 text-[10px] uppercase tracking-widest font-bold border border-neutral-900">
                     -{discount}%
                   </div>
                 )}
               </div>
 
-              {/* Modern Quick Actions with glassmorphism */}
-              <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 translate-x-4 sm:group-hover:opacity-100 sm:group-hover:translate-x-0 transition-all duration-500 z-20">
+              {/* Classic Quick Actions */}
+              <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 sm:group-hover:opacity-100 transition-all duration-300 z-20">
                 <button
                   onClick={handleToggleWishlist}
-                  className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-xl hover:shadow-2xl active:scale-90 backdrop-blur-xl border-2 ${
+                  className={`w-10 h-10 flex items-center justify-center transition-all duration-200 border ${
                     inWishlist
-                      ? 'bg-gradient-to-br from-danger to-secondary-600 text-white border-white/40 scale-105'
-                      : 'glass text-gray-700 hover:bg-gradient-to-br hover:from-danger hover:to-secondary-600 hover:text-white hover:border-white/40 border-white/60'
+                      ? 'bg-neutral-900 text-white border-neutral-900'
+                      : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-900 hover:text-white hover:border-neutral-900'
                   }`}
                   aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
                 >
-                  <Heart className={`w-5 h-5 transition-transform ${inWishlist ? 'fill-current scale-110' : 'group-hover:scale-110'}`} />
+                  <Heart className={`w-4 h-4 ${inWishlist ? 'fill-current' : ''}`} />
                 </button>
                 <button
                   onClick={handleQuickView}
-                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl glass flex items-center justify-center text-gray-700 hover:bg-gradient-to-br hover:from-primary-600 hover:to-secondary-600 hover:text-white transition-all duration-300 shadow-xl hover:shadow-2xl active:scale-90 backdrop-blur-xl border-2 border-white/60 hover:border-white/40"
+                  className="w-10 h-10 bg-white border border-neutral-300 flex items-center justify-center text-neutral-700 hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all duration-200"
                   aria-label="Quick view"
                 >
-                  <Eye className="w-5 h-5 transition-transform group-hover:scale-110" />
+                  <Eye className="w-4 h-4" />
                 </button>
                 <button
-                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl glass flex items-center justify-center text-gray-700 hover:bg-gradient-to-br hover:from-accent-600 hover:to-primary-600 hover:text-white transition-all duration-300 shadow-xl hover:shadow-2xl active:scale-90 backdrop-blur-xl border-2 border-white/60 hover:border-white/40"
+                  className="w-10 h-10 bg-white border border-neutral-300 flex items-center justify-center text-neutral-700 hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all duration-200"
                   aria-label="Compare"
                 >
-                  <Repeat className="w-5 h-5 transition-transform group-hover:scale-110" />
+                  <Repeat className="w-4 h-4" />
                 </button>
               </div>
 
-              {/* Modern Add to Cart Button - Desktop with shine effect */}
+              {/* Classic Add to Cart Button - Desktop */}
               <button
                 onClick={handleAddToCart}
-                className={`hidden sm:flex absolute bottom-0 left-0 right-0 bg-gradient-to-r text-white py-4 px-4 items-center justify-center gap-3 font-bold text-base transition-all duration-500 shadow-2xl btn-modern overflow-hidden ${
+                className={`hidden sm:flex absolute bottom-0 left-0 right-0 text-white py-4 px-4 items-center justify-center gap-2 font-semibold text-sm uppercase tracking-wide transition-all duration-300 ${
                   isHovered ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
                 } ${
                   inCartAlready
-                    ? 'from-success via-accent-500 to-success-dark'
-                    : 'from-primary-600 via-secondary-600 to-primary-700 hover:from-primary-700 hover:via-secondary-700 hover:to-primary-800'
+                    ? 'bg-neutral-700'
+                    : 'bg-neutral-900 hover:bg-neutral-800'
                 }`}
               >
-                <ShoppingCart className={`w-5 h-5 ${inCartAlready ? '' : 'group-hover:rotate-12'} transition-transform`} />
-                <span>{inCartAlready ? 'Added to Cart ✓' : 'Add to Cart'}</span>
+                <ShoppingCart className="w-4 h-4" />
+                <span>{inCartAlready ? 'Added to Cart' : 'Add to Cart'}</span>
               </button>
             </div>
 
-            {/* Modern Product Info */}
-            <div className="p-5 sm:p-6 relative bg-gradient-to-b from-white to-gray-50/50">
-              {/* Category badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-primary-500/10 to-secondary-500/10 rounded-xl mb-3">
-                <span className="text-xs font-black text-primary-600 uppercase tracking-widest">
+            {/* Classic Product Info */}
+            <div className="p-4 sm:p-5 relative bg-white">
+              {/* Category */}
+              <div className="mb-2">
+                <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold">
                   {product.category}
                 </span>
               </div>
 
-              {/* Product Name with gradient on hover */}
-              <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-gradient transition-all text-base sm:text-lg leading-tight">
+              {/* Product Name */}
+              <h3 className="font-semibold text-neutral-900 mb-3 line-clamp-2 text-base leading-snug">
                 {product.name}
               </h3>
 
-              {/* Modern Rating */}
+              {/* Classic Rating */}
               <div className="flex items-center gap-2 mb-4">
-                <div className="flex gap-1">
+                <div className="flex gap-0.5">
                   {[...Array(5)].map((_, i) => (
                     <svg
                       key={i}
-                      className={`w-4 h-4 transition-all ${
+                      className={`w-3.5 h-3.5 ${
                         i < Math.floor(product.rating)
-                          ? 'text-warning fill-current drop-shadow-sm'
-                          : 'text-gray-300'
+                          ? 'text-neutral-900 fill-current'
+                          : 'text-neutral-300 fill-current'
                       }`}
-                      fill="currentColor"
                       viewBox="0 0 20 20"
                     >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
                 </div>
-                <span className="text-xs font-bold text-gray-600">
-                  {product.rating} <span className="text-gray-400 font-normal">({product.reviews})</span>
+                <span className="text-xs text-neutral-600">
+                  ({product.reviews})
                 </span>
               </div>
 
-              {/* Modern Price display */}
-              <div className="flex items-center gap-3 mb-3 sm:mb-0">
-                <span className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              {/* Classic Price display */}
+              <div className="flex items-baseline gap-2 mb-3 sm:mb-0">
+                <span className="text-xl font-semibold text-neutral-900">
                   {formatPrice(product.price)}
                 </span>
                 {product.comparePrice && (
-                  <span className="text-sm font-semibold text-gray-400 line-through decoration-2">
+                  <span className="text-sm text-neutral-400 line-through">
                     {formatPrice(product.comparePrice)}
                   </span>
                 )}
               </div>
 
-              {/* Modern Add to Cart Button - Mobile */}
+              {/* Classic Add to Cart Button - Mobile */}
               <button
                 onClick={handleAddToCart}
-                className={`sm:hidden w-full bg-gradient-to-r text-white py-3.5 px-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-sm transition-all duration-300 shadow-xl hover:shadow-2xl active:scale-95 btn-modern ${
+                className={`sm:hidden w-full text-white py-3 px-4 flex items-center justify-center gap-2 font-semibold text-sm uppercase tracking-wide transition-all duration-200 mt-4 ${
                   inCartAlready
-                    ? 'from-success via-accent-500 to-success-dark'
-                    : 'from-primary-600 via-secondary-600 to-primary-700 hover:from-primary-700 hover:via-secondary-700 hover:to-primary-800'
+                    ? 'bg-neutral-700'
+                    : 'bg-neutral-900 hover:bg-neutral-800'
                 }`}
               >
-                <ShoppingCart className="w-5 h-5" />
-                <span>{inCartAlready ? 'Added to Cart ✓' : 'Add to Cart'}</span>
+                <ShoppingCart className="w-4 h-4" />
+                <span>{inCartAlready ? 'Added to Cart' : 'Add to Cart'}</span>
               </button>
             </div>
           </Link>

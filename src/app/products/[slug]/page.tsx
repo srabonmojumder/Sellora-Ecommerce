@@ -8,6 +8,7 @@ import { ShoppingCart, Heart, Star, Truck, Shield, ArrowLeft } from 'lucide-reac
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
 import ProductGrid from '@/components/products/ProductGrid'
+import ProductImageGallery from '@/components/product/ProductImageGallery'
 import { useCart } from '@/context/CartContext'
 import { useWishlist } from '@/context/WishlistContext'
 import { formatPrice, calculateDiscount } from '@/lib/utils'
@@ -20,7 +21,6 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
     notFound()
   }
 
-  const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || '')
   const [selectedColor, setSelectedColor] = useState(product.colors?.[0]?.name || '')
   const [quantity, setQuantity] = useState(1)
@@ -83,51 +83,14 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
         {/* Product Details */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {/* Images */}
-          <div className="space-y-4">
-            {/* Main Image */}
-            <div className="relative aspect-square bg-neutral-100 rounded-lg overflow-hidden">
-              <Image
-                src={product.images[selectedImage]}
-                alt={product.name}
-                fill
-                className="object-cover"
-                priority
-              />
-              {product.badge && (
-                <div className="absolute top-4 left-4">
-                  <Badge variant={product.badge}>{product.badge}</Badge>
-                </div>
-              )}
-              {discount > 0 && (
-                <div className="absolute top-4 left-4 mt-12">
-                  <Badge variant="sale">-{discount}%</Badge>
-                </div>
-              )}
-            </div>
-
-            {/* Thumbnails */}
-            {product.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-4">
-                {product.images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`relative aspect-square bg-neutral-100 rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedImage === index
-                        ? 'border-neutral-900'
-                        : 'border-transparent hover:border-neutral-300'
-                    }`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${product.name} - ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
+          <div>
+            <ProductImageGallery
+              images={product.images}
+              productName={product.name}
+              badge={product.badge}
+              discount={discount}
+              view360Images={product.view360Images}
+            />
           </div>
 
           {/* Product Info */}

@@ -7,6 +7,7 @@ export interface Product {
   price: number
   comparePrice?: number
   images: string[]
+  view360Images?: string[]
   category: string
   subcategory?: string
   tags: string[]
