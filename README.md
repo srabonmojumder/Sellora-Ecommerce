@@ -368,4 +368,4 @@ MIT License - feel free to use this project for personal or commercial purposes.
 
 ---
 
-**Built with ❤️ by the Sellora Team**
+**Built with ❤️ Srabon Mozduner**
