@@ -1,9 +1,22 @@
+'use client'
+
+import { useState, FormEvent } from 'react'
 import Link from 'next/link'
 import { Facebook, Instagram, Twitter, Youtube, Send } from 'lucide-react'
 import { FOOTER_LINKS, SITE_CONFIG } from '@/lib/constants'
+import { useToast } from '@/context/ToastContext'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const [email, setEmail] = useState('')
+  const { success } = useToast()
+
+  const handleSubscribe = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!email.trim()) return
+    success('Thank you for subscribing to our newsletter!')
+    setEmail('')
+  }
 
   return (
     <footer className="bg-[#f6f6f6]">
@@ -20,17 +33,23 @@ export default function Footer() {
               </p>
             </div>
             <div className="w-full lg:w-auto">
-              <div className="flex flex-col sm:flex-row gap-3 max-w-md lg:max-w-none mx-auto">
+              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md lg:max-w-none mx-auto">
                 <input
                   type="email"
                   placeholder="Enter your email address..."
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                   className="flex-1 px-5 py-3.5 text-[14px] text-[#333] bg-white border-none focus:outline-none focus:ring-2 focus:ring-white/50 min-w-0 sm:min-w-[280px]"
                 />
-                <button className="px-8 py-3.5 bg-[#000] text-white text-[14px] font-semibold uppercase tracking-wide hover:bg-[#333] transition-colors flex items-center justify-center gap-2">
+                <button
+                  type="submit"
+                  className="px-8 py-3.5 bg-[#000] text-white text-[14px] font-semibold uppercase tracking-wide hover:bg-[#333] transition-colors flex items-center justify-center gap-2"
+                >
                   <Send className="w-4 h-4" />
                   Subscribe
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -47,7 +66,7 @@ export default function Footer() {
               </h2>
             </Link>
             <p className="text-[#555] text-[14px] leading-relaxed mb-6">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis.
+              Sellora is your premier destination for curated fashion, electronics, and lifestyle products. We bring you quality items from trusted brands worldwide.
             </p>
             {/* Social Icons */}
             <div className="flex gap-3">
@@ -80,6 +99,7 @@ export default function Footer() {
               </a>
               <a
                 href="#"
+                title="Coming soon"
                 className="w-10 h-10 flex items-center justify-center bg-white text-[#555] hover:bg-[#a749ff] hover:text-white transition-all duration-300 rounded"
                 aria-label="Youtube"
               >

@@ -6,33 +6,57 @@ import { Mail, Phone, MapPin, Clock, ChevronRight } from 'lucide-react'
 import Input from '@/components/ui/Input'
 import Textarea from '@/components/ui/Textarea'
 import Button from '@/components/ui/Button'
+import { useToast } from '@/context/ToastContext'
 
 export default function ContactPage() {
+  const { addToast } = useToast()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
     message: '',
   })
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev }
+        delete newErrors[name]
+        return newErrors
+      })
+    }
+  }
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {}
+    if (!formData.name.trim()) newErrors.name = 'Name is required'
+    if (!formData.email.trim()) newErrors.email = 'Email is required'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+      newErrors.email = 'Please enter a valid email'
+    if (!formData.subject.trim()) newErrors.subject = 'Subject is required'
+    if (!formData.message.trim()) newErrors.message = 'Message is required'
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
+    if (!validate()) {
+      addToast('Please fill in all required fields', 'error')
+      return
+    }
 
-    // Simulate form submission
+    setIsSubmitting(true)
     setTimeout(() => {
       setIsSubmitting(false)
-      alert('Message sent successfully!')
+      addToast('Message sent successfully! We\'ll get back to you soon.', 'success')
       setFormData({ name: '', email: '', subject: '', message: '' })
     }, 1500)
   }
@@ -121,10 +145,10 @@ export default function ContactPage() {
                 Check out our FAQ section for quick answers to common questions.
               </p>
               <Link
-                href="/faq"
+                href="/blog"
                 className="text-[14px] font-medium text-white uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-white hover:after:bg-transparent transition-all"
               >
-                Visit FAQ
+                Visit Our Blog
               </Link>
             </div>
           </div>
@@ -139,39 +163,39 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <Input
-                    label="Your Name"
+                    label="Your Name *"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    required
+                    error={errors.name}
                     placeholder="John Doe"
                   />
                   <Input
-                    label="Email Address"
+                    label="Email Address *"
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    required
+                    error={errors.email}
                     placeholder="john@example.com"
                   />
                 </div>
 
                 <Input
-                  label="Subject"
+                  label="Subject *"
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
-                  required
+                  error={errors.subject}
                   placeholder="How can we help you?"
                 />
 
                 <Textarea
-                  label="Message"
+                  label="Message *"
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  required
+                  error={errors.message}
                   rows={6}
                   placeholder="Tell us more about your inquiry..."
                 />

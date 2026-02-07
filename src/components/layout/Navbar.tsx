@@ -1,21 +1,27 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Menu, X, Search, ShoppingCart, Heart, User, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NAV_LINKS } from '@/lib/constants'
 import { useCart } from '@/context/CartContext'
 import { useWishlist } from '@/context/WishlistContext'
 import CurrencySelector from '@/components/ui/CurrencySelector'
+import CartDrawer from '@/components/ui/CartDrawer'
 
 export default function Navbar() {
+  const router = useRouter()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const { itemCount } = useCart()
   const { itemCount: wishlistCount } = useWishlist()
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,10 +32,29 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close mobile menu on route change
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus()
+    }
+  }, [isSearchOpen])
+
   useEffect(() => {
     setIsMobileMenuOpen(false)
   }, [])
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/shop?search=${encodeURIComponent(searchQuery.trim())}`)
+      setIsSearchOpen(false)
+      setSearchQuery('')
+    }
+  }
+
+  const handleCartClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setIsCartDrawerOpen(true)
+  }
 
   return (
     <>
@@ -39,7 +64,7 @@ export default function Navbar() {
           isScrolled ? 'shadow-md' : ''
         )}
       >
-        {/* Flone-style Top Bar */}
+        {/* Top Bar */}
         <div className="bg-[#f6f6f6] border-b border-[#ebebeb]">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-10 text-[13px]">
@@ -65,65 +90,90 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Flone-style Main Navigation */}
+        {/* Main Navigation */}
         <nav className="border-b border-[#ebebeb]">
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between h-[90px]">
+            <div className="flex items-center justify-between h-[70px] sm:h-[80px]">
               {/* Logo */}
               <Link href="/" className="flex-shrink-0">
-                <h1 className="text-[28px] sm:text-[32px] font-bold text-[#000] tracking-tight hover:text-[#a749ff] transition-colors">
+                <h1 className="text-[26px] sm:text-[30px] font-bold text-[#000] tracking-tight hover:text-[#a749ff] transition-colors">
                   Sellora
                 </h1>
               </Link>
 
-              {/* Desktop Navigation - Center */}
+              {/* Desktop Navigation */}
               <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
                 <div className="flex items-center gap-8 xl:gap-10">
                   {NAV_LINKS.map((link) => (
-                    <div key={link.href} className="relative group">
+                    <div
+                      key={link.href}
+                      className="relative group"
+                      onMouseEnter={() => link.submenu && setOpenDropdown(link.href)}
+                      onMouseLeave={() => setOpenDropdown(null)}
+                    >
                       <Link
                         href={link.href}
                         className="flex items-center gap-1 text-[15px] font-medium text-[#000] hover:text-[#a749ff] transition-colors py-2"
                       >
                         {link.label}
                         {(link.submenu || link.megaMenu) && (
-                          <ChevronDown className="w-4 h-4" />
+                          <ChevronDown className="w-3.5 h-3.5" />
                         )}
                       </Link>
-                      {/* Dropdown hover underline effect */}
                       <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#a749ff] group-hover:w-full transition-all duration-300" />
+
+                      {/* Dropdown Menu */}
+                      {link.submenu && (
+                        <div
+                          className={cn(
+                            'absolute top-full left-0 mt-0 w-56 bg-white border border-[#ebebeb] shadow-lg transition-all duration-200 z-50',
+                            openDropdown === link.href
+                              ? 'opacity-100 visible translate-y-0'
+                              : 'opacity-0 invisible -translate-y-2'
+                          )}
+                        >
+                          <div className="py-2">
+                            {link.submenu.map((sub) => (
+                              <Link
+                                key={sub.href}
+                                href={sub.href}
+                                className="block px-5 py-2.5 text-[14px] text-[#555] hover:text-[#a749ff] hover:bg-[#f6f6f6] transition-colors"
+                              >
+                                {sub.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Right Icons */}
-              <div className="flex items-center gap-1 sm:gap-3">
-                {/* Search */}
+              <div className="flex items-center gap-1 sm:gap-2">
                 <button
                   onClick={() => setIsSearchOpen(!isSearchOpen)}
                   className="p-2 hover:text-[#a749ff] transition-colors relative group"
-                  aria-label="Search"
+                  aria-label="Search products"
                 >
-                  <Search className="w-[22px] h-[22px] text-[#000] group-hover:text-[#a749ff]" />
+                  <Search className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px] text-[#000] group-hover:text-[#a749ff]" />
                 </button>
 
-                {/* User Account */}
                 <Link
-                  href="/account"
+                  href="/about"
                   className="p-2 hover:text-[#a749ff] transition-colors relative group hidden sm:block"
-                  aria-label="Account"
+                  aria-label="About us"
                 >
-                  <User className="w-[22px] h-[22px] text-[#000] group-hover:text-[#a749ff]" />
+                  <User className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px] text-[#000] group-hover:text-[#a749ff]" />
                 </Link>
 
-                {/* Wishlist */}
                 <Link
                   href="/wishlist"
                   className="p-2 hover:text-[#a749ff] transition-colors relative group"
-                  aria-label="Wishlist"
+                  aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} items` : ''}`}
                 >
-                  <Heart className="w-[22px] h-[22px] text-[#000] group-hover:text-[#a749ff]" />
+                  <Heart className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px] text-[#000] group-hover:text-[#a749ff]" />
                   {wishlistCount > 0 && (
                     <span className="absolute -top-0.5 -right-0.5 bg-[#a749ff] text-white text-[10px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full font-medium">
                       {wishlistCount}
@@ -131,25 +181,24 @@ export default function Navbar() {
                   )}
                 </Link>
 
-                {/* Cart */}
-                <Link
-                  href="/cart"
+                <button
+                  onClick={handleCartClick}
                   className="p-2 hover:text-[#a749ff] transition-colors relative group"
-                  aria-label="Shopping cart"
+                  aria-label={`Shopping cart${itemCount > 0 ? `, ${itemCount} items` : ''}`}
                 >
-                  <ShoppingCart className="w-[22px] h-[22px] text-[#000] group-hover:text-[#a749ff]" />
+                  <ShoppingCart className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px] text-[#000] group-hover:text-[#a749ff]" />
                   {itemCount > 0 && (
                     <span className="absolute -top-0.5 -right-0.5 bg-[#a749ff] text-white text-[10px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full font-medium">
                       {itemCount}
                     </span>
                   )}
-                </Link>
+                </button>
 
-                {/* Mobile Menu Toggle */}
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   className="p-2 hover:text-[#a749ff] transition-colors lg:hidden ml-1"
                   aria-label="Toggle menu"
+                  aria-expanded={isMobileMenuOpen}
                 >
                   {isMobileMenuOpen ? (
                     <X className="w-6 h-6 text-[#000]" />
@@ -169,18 +218,23 @@ export default function Navbar() {
             )}
           >
             <div className="container mx-auto px-4">
-              <div className="relative max-w-2xl mx-auto">
+              <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto">
                 <input
+                  ref={searchInputRef}
                   type="text"
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full px-4 py-3 pr-12 border border-[#ebebeb] focus:border-[#a749ff] focus:outline-none text-[15px] transition-colors"
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-[#a749ff] transition-colors">
+                <button
+                  type="submit"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-[#a749ff] transition-colors"
+                  aria-label="Submit search"
+                >
                   <Search className="w-5 h-5" />
                 </button>
-              </div>
+              </form>
             </div>
           </div>
 
@@ -188,28 +242,36 @@ export default function Navbar() {
           <div
             className={cn(
               'lg:hidden absolute top-full left-0 right-0 bg-white border-b border-[#ebebeb] shadow-lg transition-all duration-300 overflow-hidden',
-              isMobileMenuOpen ? 'max-h-[500px]' : 'max-h-0'
+              isMobileMenuOpen ? 'max-h-[80vh] overflow-y-auto' : 'max-h-0'
             )}
           >
             <div className="container mx-auto px-4 py-4">
               <div className="flex flex-col">
                 {NAV_LINKS.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-[15px] font-medium text-[#000] hover:text-[#a749ff] py-3 border-b border-[#ebebeb] last:border-b-0 transition-colors"
-                  >
-                    {link.label}
-                  </Link>
+                  <div key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-[15px] font-medium text-[#000] hover:text-[#a749ff] py-3 border-b border-[#ebebeb] transition-colors block"
+                    >
+                      {link.label}
+                    </Link>
+                    {link.submenu && (
+                      <div className="pl-4 bg-[#f6f6f6]">
+                        {link.submenu.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="text-[14px] text-[#555] hover:text-[#a749ff] py-2.5 border-b border-[#ebebeb] last:border-b-0 transition-colors block"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
-                <Link
-                  href="/account"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-[15px] font-medium text-[#000] hover:text-[#a749ff] py-3 sm:hidden transition-colors"
-                >
-                  My Account
-                </Link>
               </div>
             </div>
           </div>
@@ -217,7 +279,10 @@ export default function Navbar() {
       </header>
 
       {/* Spacer for fixed header */}
-      <div className="h-[130px] sm:h-[140px]" />
+      <div className="h-[110px] sm:h-[120px]" />
+
+      {/* Cart Drawer */}
+      <CartDrawer isOpen={isCartDrawerOpen} onClose={() => setIsCartDrawerOpen(false)} />
     </>
   )
 }

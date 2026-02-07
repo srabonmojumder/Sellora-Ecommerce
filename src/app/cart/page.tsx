@@ -123,9 +123,10 @@ export default function CartPage() {
                     </div>
                   </div>
 
-                  {/* Price */}
-                  <div className="sm:col-span-2 text-center hidden sm:block">
-                    <span className="text-[15px] text-[#000]">
+                  {/* Price - visible on mobile too */}
+                  <div className="sm:col-span-2 text-center">
+                    <span className="text-[15px] text-[#000] sm:block">
+                      <span className="sm:hidden text-[13px] text-[#555] mr-1">Price:</span>
                       {formatPrice(item.product.price)}
                     </span>
                   </div>
@@ -221,11 +222,19 @@ export default function CartPage() {
                 </Button>
               </Link>
 
-              <Link href="/shop" className="block">
-                <Button variant="outline" size="lg" fullWidth>
-                  Continue Shopping
-                </Button>
-              </Link>
+              {/* Coupon Code */}
+              <div className="mb-4">
+                <div className="flex">
+                  <input
+                    type="text"
+                    placeholder="Coupon code"
+                    className="flex-1 px-4 py-3 border border-[#ebebeb] border-r-0 text-[14px] text-[#333] focus:border-[#a749ff] focus:outline-none transition-colors"
+                  />
+                  <button className="px-5 py-3 bg-[#a749ff] text-white text-[13px] font-medium uppercase hover:bg-[#000] transition-colors">
+                    Apply
+                  </button>
+                </div>
+              </div>
 
               {/* Free Shipping Notice */}
               {shipping > 0 && subtotal < 100 && (

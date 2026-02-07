@@ -9,10 +9,10 @@ interface BadgeProps {
 
 export default function Badge({ variant = 'default', children, className }: BadgeProps) {
   const variants = {
-    new: 'bg-accent-green text-white',
-    sale: 'bg-accent-red text-white',
-    hot: 'bg-accent-yellow text-white',
-    default: 'bg-black text-white',
+    new: 'bg-[#22c55e] text-white',
+    sale: 'bg-[#ef4444] text-white',
+    hot: 'bg-[#f59e0b] text-white',
+    default: 'bg-[#a749ff] text-white',
   }
 
   return (

@@ -46,7 +46,7 @@ export default function ProductFilters({ onFilterChange, categories = [] }: Prod
       ? selectedCategories.filter((c) => c !== category)
       : [...selectedCategories, category]
     setSelectedCategories(updated)
-    onFilterChange?.({ categories: updated })
+    onFilterChange?.({ categories: updated, colors: selectedColors, sizes: selectedSizes, tags: selectedTags })
   }
 
   const handleColorToggle = (color: string) => {
@@ -54,6 +54,7 @@ export default function ProductFilters({ onFilterChange, categories = [] }: Prod
       ? selectedColors.filter((c) => c !== color)
       : [...selectedColors, color]
     setSelectedColors(updated)
+    onFilterChange?.({ categories: selectedCategories, colors: updated, sizes: selectedSizes, tags: selectedTags })
   }
 
   const handleSizeToggle = (size: string) => {
@@ -61,6 +62,7 @@ export default function ProductFilters({ onFilterChange, categories = [] }: Prod
       ? selectedSizes.filter((s) => s !== size)
       : [...selectedSizes, size]
     setSelectedSizes(updated)
+    onFilterChange?.({ categories: selectedCategories, colors: selectedColors, sizes: updated, tags: selectedTags })
   }
 
   const handleTagToggle = (tag: string) => {
@@ -68,6 +70,7 @@ export default function ProductFilters({ onFilterChange, categories = [] }: Prod
       ? selectedTags.filter((t) => t !== tag)
       : [...selectedTags, tag]
     setSelectedTags(updated)
+    onFilterChange?.({ categories: selectedCategories, colors: selectedColors, sizes: selectedSizes, tags: updated })
   }
 
   return (

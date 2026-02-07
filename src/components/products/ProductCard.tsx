@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Heart, Eye, Shuffle } from 'lucide-react'
 import type { Product, ViewMode } from '@/types'
 import QuickView from '@/components/ui/QuickView'
+import StarRating from '@/components/ui/StarRating'
 import { useCart } from '@/context/CartContext'
 import { useWishlist } from '@/context/WishlistContext'
 import { formatPrice, calculateDiscount } from '@/lib/utils'
@@ -13,6 +14,12 @@ import { formatPrice, calculateDiscount } from '@/lib/utils'
 interface ProductCardProps {
   product: Product
   viewMode?: ViewMode
+}
+
+const badgeColorMap: Record<string, string> = {
+  new: 'bg-[#22c55e]',
+  sale: 'bg-[#ef4444]',
+  hot: 'bg-[#f59e0b]',
 }
 
 export default function ProductCard({ product, viewMode = 'grid' }: ProductCardProps) {
@@ -70,9 +77,9 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
 
                 {/* Badges */}
                 <div className="absolute top-3 left-3 flex flex-col gap-2">
-                  {product.badge === 'new' && (
-                    <span className="bg-[#a749ff] text-white px-3 py-1 text-[11px] font-medium uppercase">
-                      New
+                  {product.badge && (
+                    <span className={`${badgeColorMap[product.badge]} text-white px-3 py-1 text-[11px] font-medium uppercase`}>
+                      {product.badge}
                     </span>
                   )}
                   {discount > 0 && (
@@ -102,23 +109,8 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
                 </div>
 
                 {/* Rating */}
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <svg
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i < Math.floor(product.rating)
-                            ? 'text-[#ffa900] fill-current'
-                            : 'text-[#d5d5d5] fill-current'
-                        }`}
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <span className="text-[13px] text-[#555]">({product.reviews} reviews)</span>
+                <div className="mb-4">
+                  <StarRating rating={product.rating} reviews={product.reviews} showCount />
                 </div>
 
                 <p className="text-[14px] text-[#555] mb-6 line-clamp-2">
@@ -206,14 +198,9 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
 
               {/* Badges */}
               <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
-                {product.badge === 'new' && (
-                  <span className="bg-[#a749ff] text-white px-3 py-1 text-[11px] font-medium uppercase">
-                    New
-                  </span>
-                )}
-                {product.badge === 'sale' && (
-                  <span className="bg-[#a749ff] text-white px-3 py-1 text-[11px] font-medium uppercase">
-                    Sale
+                {product.badge && (
+                  <span className={`${badgeColorMap[product.badge]} text-white px-3 py-1 text-[11px] font-medium uppercase`}>
+                    {product.badge}
                   </span>
                 )}
                 {discount > 0 && (
@@ -223,13 +210,11 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
                 )}
               </div>
 
-              {/* Flone-style Action Icons - Appear from right on hover */}
+              {/* Action Icons - Always visible on mobile, slide in on hover for desktop */}
               <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
                 <button
                   onClick={handleToggleWishlist}
-                  className={`w-10 h-10 flex items-center justify-center rounded-full shadow-md transition-all duration-300 ${
-                    isHovered ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
-                  } ${
+                  className={`w-10 h-10 flex items-center justify-center rounded-full shadow-md transition-all duration-300 translate-x-0 opacity-100 sm:translate-x-4 sm:opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100 ${
                     inWishlist
                       ? 'bg-[#a749ff] text-white'
                       : 'bg-white text-[#000] hover:bg-[#a749ff] hover:text-white'
@@ -242,9 +227,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
 
                 <button
                   onClick={handleQuickView}
-                  className={`w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#000] shadow-md hover:bg-[#a749ff] hover:text-white transition-all duration-300 ${
-                    isHovered ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
-                  }`}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#000] shadow-md hover:bg-[#a749ff] hover:text-white transition-all duration-300 translate-x-0 opacity-100 sm:translate-x-4 sm:opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100"
                   style={{ transitionDelay: '50ms' }}
                   title="Quick View"
                 >
@@ -252,9 +235,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
                 </button>
 
                 <button
-                  className={`w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#000] shadow-md hover:bg-[#a749ff] hover:text-white transition-all duration-300 ${
-                    isHovered ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
-                  }`}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#000] shadow-md hover:bg-[#a749ff] hover:text-white transition-all duration-300 translate-x-0 opacity-100 sm:translate-x-4 sm:opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100"
                   style={{ transitionDelay: '100ms' }}
                   title="Compare"
                 >
@@ -300,21 +281,9 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
                 )}
               </div>
 
-              {/* Rating - Optional, can be hidden for cleaner look */}
-              <div className="flex items-center justify-center gap-1 mt-2">
-                {[...Array(5)].map((_, i) => (
-                  <svg
-                    key={i}
-                    className={`w-3.5 h-3.5 ${
-                      i < Math.floor(product.rating)
-                        ? 'text-[#ffa900] fill-current'
-                        : 'text-[#d5d5d5] fill-current'
-                    }`}
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
+              {/* Rating */}
+              <div className="flex justify-center mt-2">
+                <StarRating rating={product.rating} reviews={product.reviews} showCount />
               </div>
             </div>
           </Link>

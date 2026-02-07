@@ -8,6 +8,7 @@ import { CurrencyProvider } from '@/context/CurrencyContext'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import ToastContainer from '@/components/ui/ToastContainer'
+import BackToTop from '@/components/ui/BackToTop'
 import './globals.css'
 
 const poppins = Poppins({
@@ -80,16 +81,20 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} ${playfair.variable}`}>
       <body className="font-sans antialiased bg-white">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <ToastProvider>
           <CurrencyProvider>
             <CartProvider>
               <WishlistProvider>
                 <Navbar />
-                <main className="min-h-screen pt-[116px] relative">
+                <main id="main-content" className="min-h-screen relative">
                   {children}
                 </main>
                 <Footer />
                 <ToastContainer />
+                <BackToTop />
               </WishlistProvider>
             </CartProvider>
           </CurrencyProvider>
