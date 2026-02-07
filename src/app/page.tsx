@@ -72,7 +72,7 @@ export default function HomePage() {
   }, [])
 
   // -- Product filtering by tab --
-  const newArrivals = sampleProducts.filter((p) => p.badge === 'new').slice(0, 8)
+  const newArrivals = sampleProducts.filter((p) => p.badge === 'new').slice(0, 4)
   const bestSellers = [...sampleProducts]
     .sort((a, b) => b.reviews - a.reviews)
     .slice(0, 8)
@@ -381,10 +381,10 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* <ProductGrid
+          <ProductGrid
             products={[...sampleProducts].sort((a, b) => b.reviews - a.reviews).slice(0, 4)}
             columns={4}
-          /> */}
+          />
         </div>
       </section>
 

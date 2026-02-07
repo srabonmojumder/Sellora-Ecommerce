@@ -3,17 +3,33 @@
 import { useState } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ShoppingCart, Heart, Truck, Shield, ChevronRight, Minus, Plus } from 'lucide-react'
+import {
+  ShoppingCart,
+  Heart,
+  Truck,
+  Shield,
+  ChevronRight,
+  Minus,
+  Plus,
+  Share2,
+  RotateCcw,
+  Package,
+  CheckCircle2,
+  Clock,
+  Facebook,
+  Twitter,
+} from 'lucide-react'
 import Button from '@/components/ui/Button'
 import StarRating from '@/components/ui/StarRating'
 import ProductGrid from '@/components/products/ProductGrid'
 import ProductImageGallery from '@/components/product/ProductImageGallery'
 import { useCart } from '@/context/CartContext'
 import { useWishlist } from '@/context/WishlistContext'
+import { useToast } from '@/context/ToastContext'
 import { formatPrice, calculateDiscount } from '@/lib/utils'
 import { sampleProducts } from '@/data/products'
 
-type DetailTab = 'description' | 'reviews' | 'shipping'
+type DetailTab = 'description' | 'reviews' | 'shipping' | 'additional'
 
 export default function ProductDetailPage({ params }: { params: { slug: string } }) {
   const product = sampleProducts.find((p) => p.slug === params.slug)
@@ -29,6 +45,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
   const { addToCart, isInCart } = useCart()
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
+  const { success } = useToast()
 
   const discount = product.comparePrice
     ? calculateDiscount(product.price, product.comparePrice)
@@ -39,6 +56,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
   const handleAddToCart = () => {
     addToCart(product, quantity, selectedSize, selectedColor)
+    success(`${product.name} added to cart!`)
   }
 
   const handleToggleWishlist = () => {
@@ -46,6 +64,20 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
       removeFromWishlist(product.id)
     } else {
       addToWishlist(product)
+      success(`${product.name} added to wishlist!`)
+    }
+  }
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      await navigator.share({
+        title: product.name,
+        text: product.description,
+        url: window.location.href,
+      })
+    } else {
+      await navigator.clipboard.writeText(window.location.href)
+      success('Link copied to clipboard!')
     }
   }
 
@@ -55,6 +87,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
   const tabs: { key: DetailTab; label: string }[] = [
     { key: 'description', label: 'Description' },
+    { key: 'additional', label: 'Additional Info' },
     { key: 'reviews', label: `Reviews (${product.reviews})` },
     { key: 'shipping', label: 'Shipping & Returns' },
   ]
@@ -97,12 +130,27 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
           {/* Product Info */}
           <div>
+            {/* Badge */}
+            {product.badge && (
+              <span
+                className={`inline-block px-3 py-1 text-[11px] font-medium uppercase text-white mb-3 ${
+                  product.badge === 'new'
+                    ? 'bg-[#22c55e]'
+                    : product.badge === 'sale'
+                    ? 'bg-[#ef4444]'
+                    : 'bg-[#f59e0b]'
+                }`}
+              >
+                {product.badge}
+              </span>
+            )}
+
             <h2 className="text-[20px] sm:text-[28px] lg:text-[32px] font-bold text-[#000] mb-3 sm:mb-4">
               {product.name}
             </h2>
 
             {/* Rating */}
-            <div className="mb-3 sm:mb-4">
+            <div className="flex items-center gap-3 mb-3 sm:mb-4">
               <StarRating rating={product.rating} reviews={product.reviews} size="md" showCount />
             </div>
 
@@ -118,7 +166,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
               )}
               {discount > 0 && (
                 <span className="bg-[#ef4444] text-white px-2 py-1 text-[12px] font-medium">
-                  -{discount}%
+                  Save {discount}%
                 </span>
               )}
             </div>
@@ -127,6 +175,23 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
             <p className="text-[13px] sm:text-[15px] text-[#555] mb-5 sm:mb-8 leading-relaxed">
               {product.description}
             </p>
+
+            {/* Stock Status */}
+            <div className="flex items-center gap-2 mb-6">
+              {product.inStock ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4 text-[#22c55e]" />
+                  <span className="text-[13px] font-medium text-[#22c55e]">
+                    In Stock ({product.inventory} available)
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Clock className="w-4 h-4 text-[#ef4444]" />
+                  <span className="text-[13px] font-medium text-[#ef4444]">Out of Stock</span>
+                </>
+              )}
+            </div>
 
             {/* Color Selection */}
             {product.colors && product.colors.length > 0 && (
@@ -177,7 +242,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
             )}
 
             {/* Quantity & Actions */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <div className="flex items-center border border-[#ebebeb]">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -217,31 +282,101 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
               </button>
             </div>
 
+            {/* Share & Social */}
+            <div className="flex items-center gap-3 mb-8 pb-6 border-b border-[#ebebeb]">
+              <span className="text-[13px] font-medium text-[#000]">Share:</span>
+              <button
+                onClick={handleShare}
+                className="w-9 h-9 flex items-center justify-center border border-[#ebebeb] text-[#555] hover:bg-[#a749ff] hover:text-white hover:border-[#a749ff] transition-all"
+                title="Share"
+              >
+                <Share2 className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')}
+                className="w-9 h-9 flex items-center justify-center border border-[#ebebeb] text-[#555] hover:bg-[#3b5998] hover:text-white hover:border-[#3b5998] transition-all"
+                title="Share on Facebook"
+              >
+                <Facebook className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(product.name)}&url=${encodeURIComponent(window.location.href)}`, '_blank')}
+                className="w-9 h-9 flex items-center justify-center border border-[#ebebeb] text-[#555] hover:bg-[#1da1f2] hover:text-white hover:border-[#1da1f2] transition-all"
+                title="Share on Twitter"
+              >
+                <Twitter className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Product Meta */}
+            <div className="space-y-2 mb-8">
+              <p className="text-[13px] text-[#555]">
+                <span className="font-medium text-[#000]">SKU:</span> {product.sku}
+              </p>
+              <p className="text-[13px] text-[#555]">
+                <span className="font-medium text-[#000]">Category:</span>{' '}
+                <Link href="/shop" className="hover:text-[#a749ff] transition-colors">
+                  {product.category}
+                </Link>
+              </p>
+              {product.tags.length > 0 && (
+                <p className="text-[13px] text-[#555]">
+                  <span className="font-medium text-[#000]">Tags:</span>{' '}
+                  {product.tags.map((tag, i) => (
+                    <span key={tag}>
+                      <Link href="/shop" className="hover:text-[#a749ff] transition-colors capitalize">
+                        {tag}
+                      </Link>
+                      {i < product.tags.length - 1 && ', '}
+                    </span>
+                  ))}
+                </p>
+              )}
+            </div>
+
             {/* Features */}
-            <div className="space-y-4 border-t border-[#ebebeb] pt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#f6f6f6] p-5">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-[#f6f6f6] flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-white flex items-center justify-center flex-shrink-0">
                   <Truck className="w-5 h-5 text-[#a749ff]" />
                 </div>
                 <div>
-                  <p className="text-[14px] font-medium text-[#000]">Free Shipping</p>
-                  <p className="text-[13px] text-[#555]">On orders over $100</p>
+                  <p className="text-[13px] font-medium text-[#000]">Free Shipping</p>
+                  <p className="text-[12px] text-[#555]">On orders over $100</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-[#f6f6f6] flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-white flex items-center justify-center flex-shrink-0">
                   <Shield className="w-5 h-5 text-[#a749ff]" />
                 </div>
                 <div>
-                  <p className="text-[14px] font-medium text-[#000]">Secure Payment</p>
-                  <p className="text-[13px] text-[#555]">100% secure transactions</p>
+                  <p className="text-[13px] font-medium text-[#000]">Secure Payment</p>
+                  <p className="text-[12px] text-[#555]">100% secure checkout</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-white flex items-center justify-center flex-shrink-0">
+                  <RotateCcw className="w-5 h-5 text-[#a749ff]" />
+                </div>
+                <div>
+                  <p className="text-[13px] font-medium text-[#000]">Easy Returns</p>
+                  <p className="text-[12px] text-[#555]">30-day return policy</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-white flex items-center justify-center flex-shrink-0">
+                  <Package className="w-5 h-5 text-[#a749ff]" />
+                </div>
+                <div>
+                  <p className="text-[13px] font-medium text-[#000]">Quality Guaranteed</p>
+                  <p className="text-[12px] text-[#555]">Premium materials</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Description / Reviews / Shipping Tabs */}
+        {/* Description / Additional / Reviews / Shipping Tabs */}
         <div className="mb-16 sm:mb-20">
           <div className="flex border-b border-[#ebebeb] mb-6 sm:mb-8 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
             {tabs.map((tab) => (
@@ -261,39 +396,122 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
           {/* Tab Content */}
           {activeTab === 'description' && (
-            <div className="max-w-3xl">
+            <div className="max-w-4xl">
+              <h3 className="text-[18px] sm:text-[22px] font-bold text-[#000] mb-4">
+                About This Product
+              </h3>
               <p className="text-[14px] sm:text-[15px] text-[#555] leading-relaxed mb-6">
                 {product.description}
               </p>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="bg-[#f6f6f6] p-4">
-                  <p className="text-[14px] font-medium text-[#000] mb-1">Category</p>
-                  <p className="text-[14px] text-[#555]">{product.category}</p>
-                </div>
-                <div className="bg-[#f6f6f6] p-4">
-                  <p className="text-[14px] font-medium text-[#000] mb-1">Availability</p>
-                  <p className="text-[14px] text-[#555]">
-                    {product.inventory > 0
-                      ? `In Stock (${product.inventory} available)`
-                      : 'Out of Stock'}
-                  </p>
-                </div>
-                {product.tags.length > 0 && (
-                  <div className="bg-[#f6f6f6] p-4 sm:col-span-2">
-                    <p className="text-[14px] font-medium text-[#000] mb-1">Tags</p>
-                    <div className="flex flex-wrap gap-2">
-                      {product.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-3 py-1 bg-white text-[12px] text-[#555] border border-[#ebebeb]"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+              <p className="text-[14px] sm:text-[15px] text-[#555] leading-relaxed mb-8">
+                Crafted with care and attention to detail, this product is designed to meet the highest standards
+                of quality and comfort. Whether you&apos;re looking for everyday essentials or something special,
+                this item delivers on both style and functionality.
+              </p>
+
+              {/* Key Highlights */}
+              <h4 className="text-[16px] font-semibold text-[#000] mb-4">Key Highlights</h4>
+              <div className="grid sm:grid-cols-2 gap-3 mb-8">
+                <div className="flex items-start gap-3 bg-[#f6f6f6] p-4">
+                  <CheckCircle2 className="w-5 h-5 text-[#a749ff] flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-[14px] font-medium text-[#000]">Premium Quality</p>
+                    <p className="text-[13px] text-[#555]">Made from high-quality materials for lasting durability</p>
                   </div>
-                )}
+                </div>
+                <div className="flex items-start gap-3 bg-[#f6f6f6] p-4">
+                  <CheckCircle2 className="w-5 h-5 text-[#a749ff] flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-[14px] font-medium text-[#000]">Comfortable Fit</p>
+                    <p className="text-[13px] text-[#555]">Designed for all-day comfort and ease of movement</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-[#f6f6f6] p-4">
+                  <CheckCircle2 className="w-5 h-5 text-[#a749ff] flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-[14px] font-medium text-[#000]">Versatile Style</p>
+                    <p className="text-[13px] text-[#555]">Perfect for casual and semi-formal occasions</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-[#f6f6f6] p-4">
+                  <CheckCircle2 className="w-5 h-5 text-[#a749ff] flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-[14px] font-medium text-[#000]">Easy Care</p>
+                    <p className="text-[13px] text-[#555]">Machine washable and easy to maintain</p>
+                  </div>
+                </div>
               </div>
+            </div>
+          )}
+
+          {activeTab === 'additional' && (
+            <div className="max-w-3xl">
+              <h3 className="text-[18px] sm:text-[22px] font-bold text-[#000] mb-6">
+                Additional Information
+              </h3>
+              <table className="w-full text-[14px]">
+                <tbody>
+                  <tr className="border-b border-[#ebebeb]">
+                    <td className="py-4 pr-4 font-medium text-[#000] w-[140px] sm:w-[200px]">SKU</td>
+                    <td className="py-4 text-[#555]">{product.sku}</td>
+                  </tr>
+                  <tr className="border-b border-[#ebebeb]">
+                    <td className="py-4 pr-4 font-medium text-[#000]">Category</td>
+                    <td className="py-4 text-[#555]">{product.category}</td>
+                  </tr>
+                  {product.colors && product.colors.length > 0 && (
+                    <tr className="border-b border-[#ebebeb]">
+                      <td className="py-4 pr-4 font-medium text-[#000]">Available Colors</td>
+                      <td className="py-4 text-[#555]">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {product.colors.map((color) => (
+                            <span key={color.name} className="flex items-center gap-1.5">
+                              <span
+                                className="w-4 h-4 border border-[#ebebeb] inline-block"
+                                style={{ backgroundColor: color.hex }}
+                              />
+                              {color.name}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  {product.sizes && product.sizes.length > 0 && (
+                    <tr className="border-b border-[#ebebeb]">
+                      <td className="py-4 pr-4 font-medium text-[#000]">Available Sizes</td>
+                      <td className="py-4 text-[#555]">{product.sizes.join(', ')}</td>
+                    </tr>
+                  )}
+                  <tr className="border-b border-[#ebebeb]">
+                    <td className="py-4 pr-4 font-medium text-[#000]">Availability</td>
+                    <td className="py-4">
+                      {product.inStock ? (
+                        <span className="text-[#22c55e] font-medium">In Stock ({product.inventory} available)</span>
+                      ) : (
+                        <span className="text-[#ef4444] font-medium">Out of Stock</span>
+                      )}
+                    </td>
+                  </tr>
+                  {product.tags.length > 0 && (
+                    <tr className="border-b border-[#ebebeb]">
+                      <td className="py-4 pr-4 font-medium text-[#000]">Tags</td>
+                      <td className="py-4">
+                        <div className="flex flex-wrap gap-2">
+                          {product.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-3 py-1 bg-[#f6f6f6] text-[12px] text-[#555] border border-[#ebebeb] capitalize"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           )}
 
@@ -330,6 +548,8 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                   { name: 'Sarah M.', rating: 5, date: '2 weeks ago', text: 'Absolutely love this product! The quality is exceptional and it arrived faster than expected. Would definitely recommend to anyone looking for premium quality.' },
                   { name: 'James K.', rating: 4, date: '1 month ago', text: 'Great product overall. The material feels premium and the fit is perfect. Only giving 4 stars because the color is slightly different from what I expected.' },
                   { name: 'Emily R.', rating: 5, date: '1 month ago', text: 'This exceeded my expectations. The attention to detail is remarkable and it looks even better in person. Already planning to buy more!' },
+                  { name: 'Michael T.', rating: 5, date: '2 months ago', text: 'Perfect fit and excellent quality. The shipping was fast and the packaging was great. Very satisfied with my purchase.' },
+                  { name: 'Lisa W.', rating: 4, date: '2 months ago', text: 'Really nice product. Comfortable to wear and looks exactly like the photos. Would have given 5 stars but the sizing runs a bit small.' },
                 ].map((review, i) => (
                   <div key={i} className="pb-6 border-b border-[#ebebeb] last:border-0">
                     <div className="flex items-center justify-between mb-2">
@@ -352,24 +572,46 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           )}
 
           {activeTab === 'shipping' && (
-            <div className="max-w-3xl space-y-6">
+            <div className="max-w-3xl space-y-8">
               <div>
-                <h3 className="text-[16px] font-semibold text-[#000] mb-3">Shipping Policy</h3>
-                <ul className="space-y-2 text-[14px] text-[#555]">
-                  <li>Free standard shipping on orders over $100</li>
-                  <li>Standard delivery: 5-7 business days</li>
-                  <li>Express delivery: 2-3 business days ($9.99)</li>
-                  <li>Same day delivery available in select areas ($14.99)</li>
-                </ul>
+                <h3 className="text-[16px] font-semibold text-[#000] mb-4">Shipping Policy</h3>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 bg-[#f6f6f6] p-4">
+                    <Truck className="w-5 h-5 text-[#a749ff] flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-[14px] font-medium text-[#000]">Free Standard Shipping</p>
+                      <p className="text-[13px] text-[#555]">On all orders over $100. Delivery in 5-7 business days.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 bg-[#f6f6f6] p-4">
+                    <Package className="w-5 h-5 text-[#a749ff] flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-[14px] font-medium text-[#000]">Express Delivery — $9.99</p>
+                      <p className="text-[13px] text-[#555]">Get your order in 2-3 business days.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 bg-[#f6f6f6] p-4">
+                    <Clock className="w-5 h-5 text-[#a749ff] flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-[14px] font-medium text-[#000]">Same Day Delivery — $14.99</p>
+                      <p className="text-[13px] text-[#555]">Available in select metropolitan areas.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div>
-                <h3 className="text-[16px] font-semibold text-[#000] mb-3">Return Policy</h3>
-                <ul className="space-y-2 text-[14px] text-[#555]">
-                  <li>30-day return policy for all unused items</li>
-                  <li>Items must be in original packaging with tags attached</li>
-                  <li>Free returns on all orders</li>
-                  <li>Refund processed within 5-10 business days</li>
-                </ul>
+                <h3 className="text-[16px] font-semibold text-[#000] mb-4">Return Policy</h3>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 bg-[#f6f6f6] p-4">
+                    <RotateCcw className="w-5 h-5 text-[#a749ff] flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-[14px] font-medium text-[#000]">30-Day Free Returns</p>
+                      <p className="text-[13px] text-[#555]">
+                        Return any unused item within 30 days for a full refund. Items must be in original packaging with tags attached. Refunds processed within 5-10 business days.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
