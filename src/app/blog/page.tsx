@@ -1,77 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Calendar, User, ChevronRight } from 'lucide-react'
+import { blogPosts } from '@/data/blog'
 import { formatDate } from '@/lib/utils'
-
-// Sample blog data
-const blogPosts = [
-  {
-    id: '1',
-    title: 'The Ultimate Guide to Sustainable Fashion',
-    slug: 'ultimate-guide-sustainable-fashion',
-    excerpt: 'Learn how to build a sustainable wardrobe that looks great and helps the environment.',
-    image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=80',
-    author: { name: 'Sarah Johnson', avatar: 'https://i.pravatar.cc/150?img=1' },
-    category: 'Fashion',
-    publishedAt: '2024-01-20T00:00:00Z',
-    readTime: 8,
-  },
-  {
-    id: '2',
-    title: '10 Must-Have Items for Your Capsule Wardrobe',
-    slug: '10-must-have-capsule-wardrobe',
-    excerpt: 'Discover the essential pieces that will form the foundation of your versatile wardrobe.',
-    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80',
-    author: { name: 'Emily Chen', avatar: 'https://i.pravatar.cc/150?img=5' },
-    category: 'Style Tips',
-    publishedAt: '2024-01-18T00:00:00Z',
-    readTime: 6,
-  },
-  {
-    id: '3',
-    title: 'How to Style Your Home for Maximum Comfort',
-    slug: 'style-home-maximum-comfort',
-    excerpt: 'Transform your living space into a cozy sanctuary with these simple styling tips.',
-    image: 'https://images.unsplash.com/photo-1556912167-f556f1f39faa?w=800&q=80',
-    author: { name: 'Michael Brown', avatar: 'https://i.pravatar.cc/150?img=12' },
-    category: 'Home & Living',
-    publishedAt: '2024-01-15T00:00:00Z',
-    readTime: 7,
-  },
-  {
-    id: '4',
-    title: 'Tech Gadgets That Will Change Your Life',
-    slug: 'tech-gadgets-change-your-life',
-    excerpt: 'Explore the latest innovative gadgets that combine style with functionality.',
-    image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&q=80',
-    author: { name: 'David Lee', avatar: 'https://i.pravatar.cc/150?img=8' },
-    category: 'Technology',
-    publishedAt: '2024-01-12T00:00:00Z',
-    readTime: 5,
-  },
-  {
-    id: '5',
-    title: 'Spring Summer 2024: Trending Colors and Patterns',
-    slug: 'spring-summer-2024-trends',
-    excerpt: 'Get ahead of the curve with our guide to the hottest fashion trends this season.',
-    image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80',
-    author: { name: 'Jessica White', avatar: 'https://i.pravatar.cc/150?img=9' },
-    category: 'Fashion',
-    publishedAt: '2024-01-10T00:00:00Z',
-    readTime: 9,
-  },
-  {
-    id: '6',
-    title: 'The Art of Mindful Shopping',
-    slug: 'art-of-mindful-shopping',
-    excerpt: 'Make better purchasing decisions and build a collection you truly love.',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
-    author: { name: 'Alex Turner', avatar: 'https://i.pravatar.cc/150?img=13' },
-    category: 'Lifestyle',
-    publishedAt: '2024-01-08T00:00:00Z',
-    readTime: 6,
-  },
-]
 
 export default function BlogPage() {
   const featuredPost = blogPosts[0]
@@ -171,7 +102,7 @@ export default function BlogPage() {
                 </p>
                 <div className="flex items-center gap-4 text-[13px] text-[#555]">
                   <span>{formatDate(post.publishedAt)}</span>
-                  <span>•</span>
+                  <span>&bull;</span>
                   <span>{post.readTime} min read</span>
                 </div>
               </div>

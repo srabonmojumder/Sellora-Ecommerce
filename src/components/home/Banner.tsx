@@ -78,16 +78,11 @@ interface ImageBannerProps {
     subtitle?: string
     link: string
     bgColor: string
+    image?: string
   }[]
 }
 
 export function ImageBannerGrid({ items }: ImageBannerProps) {
-  const gradients = [
-    'from-[#ec4899]/30 via-[#a749ff]/20 to-transparent',
-    'from-[#3b82f6]/30 via-[#a749ff]/20 to-transparent',
-    'from-[#f59e0b]/30 via-[#a749ff]/20 to-transparent',
-  ]
-
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
       {items.map((item, index) => (
@@ -97,22 +92,29 @@ export function ImageBannerGrid({ items }: ImageBannerProps) {
           className={`group relative overflow-hidden min-h-[160px] sm:min-h-[280px] ${index === 2 ? 'col-span-2 lg:col-span-1' : ''}`}
           style={{ backgroundColor: item.bgColor }}
         >
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-6 text-center">
+          {item.image && (
+            <>
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
+            </>
+          )}
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-6 text-center z-10">
             {item.subtitle && (
-              <span className="text-[10px] sm:text-[13px] text-[#555] uppercase tracking-[1px] sm:tracking-[2px] mb-1 sm:mb-2">
+              <span className={`text-[10px] sm:text-[13px] uppercase tracking-[1px] sm:tracking-[2px] mb-1 sm:mb-2 ${item.image ? 'text-white/80' : 'text-[#555]'}`}>
                 {item.subtitle}
               </span>
             )}
-            <h3 className="text-[18px] sm:text-[26px] font-bold text-[#000] mb-2 sm:mb-4 group-hover:text-[#a749ff] transition-colors">
+            <h3 className={`text-[18px] sm:text-[26px] font-bold mb-2 sm:mb-4 transition-colors ${item.image ? 'text-white group-hover:text-[#d896ff]' : 'text-[#000] group-hover:text-[#a749ff]'}`}>
               {item.title}
             </h3>
-            <span className="text-[11px] sm:text-[13px] font-medium text-[#000] uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#000] group-hover:text-[#a749ff] group-hover:after:bg-[#a749ff] transition-colors">
+            <span className={`text-[11px] sm:text-[13px] font-medium uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] transition-colors ${item.image ? 'text-white after:bg-white group-hover:text-[#d896ff] group-hover:after:bg-[#d896ff]' : 'text-[#000] after:bg-[#000] group-hover:text-[#a749ff] group-hover:after:bg-[#a749ff]'}`}>
               Shop Now
             </span>
-          </div>
-          {/* Decorative gradient circle */}
-          <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] opacity-30 group-hover:opacity-50 transition-opacity">
-            <div className={`w-full h-full rounded-full bg-gradient-to-tr ${gradients[index] || gradients[0]}`} />
           </div>
         </Link>
       ))}

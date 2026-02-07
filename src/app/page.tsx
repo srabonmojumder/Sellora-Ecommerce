@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import Hero from '@/components/home/Hero'
 import ProductGrid from '@/components/products/ProductGrid'
 import { ImageBannerGrid, CountdownBanner, FeatureBanner } from '@/components/home/Banner'
@@ -97,18 +98,21 @@ export default function HomePage() {
       subtitle: 'New Collection',
       link: '/shop?category=women',
       bgColor: '#f1f1f1',
+      image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80',
     },
     {
       title: 'Men',
       subtitle: 'New Collection',
       link: '/shop?category=men',
       bgColor: '#f5f5f5',
+      image: 'https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=800&q=80',
     },
     {
       title: 'Accessories',
       subtitle: 'New Collection',
       link: '/shop?category=accessories',
       bgColor: '#f8f8f8',
+      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
     },
   ]
 
@@ -143,6 +147,8 @@ export default function HomePage() {
       title: 'Top 10 Wardrobe Essentials You Need This Spring',
       excerpt:
         'Refresh your closet with versatile pieces that transition effortlessly from day to night. From tailored blazers to relaxed linen trousers, these staples will keep you stylish all season.',
+      image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80',
+      slug: '10-must-have-capsule-wardrobe',
     },
     {
       id: 2,
@@ -150,6 +156,8 @@ export default function HomePage() {
       title: 'How to Style Accessories for Every Occasion',
       excerpt:
         'The right accessories can transform any outfit. Discover our expert tips on pairing watches, bags, and jewelry to elevate your everyday look and special event ensembles.',
+      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
+      slug: 'art-of-mindful-shopping',
     },
     {
       id: 3,
@@ -157,6 +165,8 @@ export default function HomePage() {
       title: 'Sustainable Fashion: Making Better Choices',
       excerpt:
         'Learn how conscious shopping decisions can reduce your environmental impact without sacrificing style. We break down what to look for in eco-friendly fabrics and ethical brands.',
+      image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=80',
+      slug: 'ultimate-guide-sustainable-fashion',
     },
   ]
 
@@ -310,20 +320,23 @@ export default function HomePage() {
               href="/shop?category=women"
               className="group relative bg-[#f5f5f5] min-h-[180px] sm:min-h-[350px] overflow-hidden flex items-center"
             >
+              <Image
+                src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80"
+                alt="Women Collection"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
               <div className="relative z-10 p-4 sm:p-10">
-                <span className="text-[10px] sm:text-[13px] text-[#555] uppercase tracking-[1px] sm:tracking-[2px] mb-1 sm:mb-2 block">
+                <span className="text-[10px] sm:text-[13px] text-white/80 uppercase tracking-[1px] sm:tracking-[2px] mb-1 sm:mb-2 block">
                   New Season
                 </span>
-                <h3 className="text-[16px] sm:text-[32px] font-bold text-[#000] mb-2 sm:mb-4 group-hover:text-[#a749ff] transition-colors">
+                <h3 className="text-[16px] sm:text-[32px] font-bold text-white mb-2 sm:mb-4 group-hover:text-[#d896ff] transition-colors">
                   Women Collection
                 </h3>
-                <span className="text-[11px] sm:text-[13px] font-medium text-[#000] uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#000] group-hover:text-[#a749ff] group-hover:after:bg-[#a749ff] transition-colors">
+                <span className="text-[11px] sm:text-[13px] font-medium text-white uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-white group-hover:text-[#d896ff] group-hover:after:bg-[#d896ff] transition-colors">
                   Shop Now
                 </span>
-              </div>
-              {/* Decorative gradient shape */}
-              <div className="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 w-[50px] h-[50px] sm:w-[100px] sm:h-[100px] opacity-10 group-hover:opacity-20 transition-opacity">
-                <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#ec4899] via-[#a749ff] to-[#f472b6]" />
               </div>
             </Link>
 
@@ -332,20 +345,23 @@ export default function HomePage() {
               href="/shop?category=men"
               className="group relative bg-[#f1f1f1] min-h-[180px] sm:min-h-[350px] overflow-hidden flex items-center"
             >
+              <Image
+                src="https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=800&q=80"
+                alt="Men Collection"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
               <div className="relative z-10 p-4 sm:p-10">
-                <span className="text-[10px] sm:text-[13px] text-[#555] uppercase tracking-[1px] sm:tracking-[2px] mb-1 sm:mb-2 block">
+                <span className="text-[10px] sm:text-[13px] text-white/80 uppercase tracking-[1px] sm:tracking-[2px] mb-1 sm:mb-2 block">
                   New Season
                 </span>
-                <h3 className="text-[16px] sm:text-[32px] font-bold text-[#000] mb-2 sm:mb-4 group-hover:text-[#a749ff] transition-colors">
+                <h3 className="text-[16px] sm:text-[32px] font-bold text-white mb-2 sm:mb-4 group-hover:text-[#d896ff] transition-colors">
                   Men Collection
                 </h3>
-                <span className="text-[11px] sm:text-[13px] font-medium text-[#000] uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#000] group-hover:text-[#a749ff] group-hover:after:bg-[#a749ff] transition-colors">
+                <span className="text-[11px] sm:text-[13px] font-medium text-white uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-white group-hover:text-[#d896ff] group-hover:after:bg-[#d896ff] transition-colors">
                   Shop Now
                 </span>
-              </div>
-              {/* Decorative gradient shape */}
-              <div className="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 w-[50px] h-[50px] sm:w-[100px] sm:h-[100px] opacity-10 group-hover:opacity-20 transition-opacity">
-                <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#3b82f6] via-[#a749ff] to-[#6366f1]" />
               </div>
             </Link>
           </div>
@@ -365,10 +381,10 @@ export default function HomePage() {
             </p>
           </div>
 
-          <ProductGrid
+          {/* <ProductGrid
             products={[...sampleProducts].sort((a, b) => b.reviews - a.reviews).slice(0, 4)}
             columns={4}
-          />
+          /> */}
         </div>
       </section>
 
@@ -388,41 +404,15 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {blogPosts.map((post) => (
               <article key={post.id} className="group">
-                {/* Gradient Thumbnail */}
-                <Link href={`/blog/post-${post.id}`} className="block mb-3 sm:mb-5 overflow-hidden">
+                {/* Blog Image */}
+                <Link href={`/blog/${post.slug}`} className="block mb-3 sm:mb-5 overflow-hidden">
                   <div className="relative aspect-[16/10] bg-[#f6f6f6] overflow-hidden">
-                    <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-500">
-                      <div
-                        className={`w-full h-full ${
-                          post.id === 1
-                            ? 'bg-gradient-to-br from-[#a749ff]/20 via-[#d896ff]/10 to-[#f3e8ff]'
-                            : post.id === 2
-                            ? 'bg-gradient-to-br from-[#ec4899]/20 via-[#f472b6]/10 to-[#fce7f3]'
-                            : 'bg-gradient-to-br from-[#3b82f6]/20 via-[#60a5fa]/10 to-[#eff6ff]'
-                        }`}
-                      />
-                      {/* Abstract decorative shapes */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div
-                          className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full opacity-20 ${
-                            post.id === 1
-                              ? 'bg-[#a749ff]'
-                              : post.id === 2
-                              ? 'bg-[#ec4899]'
-                              : 'bg-[#3b82f6]'
-                          }`}
-                        />
-                        <div
-                          className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full opacity-15 -ml-6 mt-8 ${
-                            post.id === 1
-                              ? 'bg-[#d896ff]'
-                              : post.id === 2
-                              ? 'bg-[#f472b6]'
-                              : 'bg-[#60a5fa]'
-                          }`}
-                        />
-                      </div>
-                    </div>
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
                 </Link>
 
@@ -435,7 +425,7 @@ export default function HomePage() {
 
                 {/* Title */}
                 <h3 className="text-[16px] sm:text-[20px] font-semibold text-[#000] group-hover:text-[#a749ff] transition-colors mb-2 sm:mb-3 line-clamp-2">
-                  <Link href={`/blog/post-${post.id}`}>{post.title}</Link>
+                  <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                 </h3>
 
                 {/* Excerpt */}
@@ -443,7 +433,7 @@ export default function HomePage() {
 
                 {/* Read More */}
                 <Link
-                  href={`/blog/post-${post.id}`}
+                  href={`/blog/${post.slug}`}
                   className="text-[13px] font-medium text-[#000] uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#000] hover:text-[#a749ff] hover:after:bg-[#a749ff] transition-colors inline-block"
                 >
                   Read More

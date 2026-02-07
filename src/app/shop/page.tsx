@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ChevronDown, Grid, List, ChevronRight } from 'lucide-react'
+import Image from 'next/image'
+import { Grid, List, ChevronRight, SlidersHorizontal, X } from 'lucide-react'
 import Link from 'next/link'
 import ProductGrid from '@/components/products/ProductGrid'
 import ProductFilters from '@/components/products/ProductFilters'
@@ -104,6 +105,12 @@ export default function ShopPage() {
   const endIndex = startIndex + itemsPerPage
   const paginatedProducts = filteredProducts.slice(startIndex, endIndex)
 
+  const totalActiveFilters =
+    activeFilters.categories.length +
+    activeFilters.colors.length +
+    activeFilters.sizes.length +
+    activeFilters.tags.length
+
   const handleFilterChange = (filters: {
     categories: string[]
     colors: string[]
@@ -116,10 +123,22 @@ export default function ShopPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Breadcrumb */}
-      <div className="bg-[#f6f6f6]">
-        <div className="container mx-auto px-4 py-8 sm:py-20 text-center">
-          <h1 className="text-[24px] sm:text-[40px] font-bold text-[#000] mb-3 sm:mb-4">
+      {/* Hero Banner */}
+      <div className="relative bg-[#f6f6f6] overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80"
+            alt="Shop banner"
+            fill
+            className="object-cover opacity-20"
+            priority
+          />
+        </div>
+        <div className="relative container mx-auto px-4 py-12 sm:py-20 text-center">
+          <span className="text-[12px] sm:text-[13px] text-[#a749ff] uppercase tracking-[3px] mb-3 block font-medium">
+            Explore Our Collection
+          </span>
+          <h1 className="text-[28px] sm:text-[44px] font-bold text-[#000] mb-3 sm:mb-4">
             {searchQuery ? `Results for "${searchQuery}"` : 'Shop'}
           </h1>
           <nav className="flex items-center justify-center gap-2 text-[14px]">
@@ -133,39 +152,43 @@ export default function ShopPage() {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-6 sm:py-16 lg:py-20">
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12">
-          {/* Filters Sidebar */}
-          <aside className="hidden lg:block w-[270px] flex-shrink-0">
-            <ProductFilters categories={categories} onFilterChange={handleFilterChange} />
+      <div className="container mx-auto px-4 py-8 sm:py-12 lg:py-16">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
+          {/* Filters Sidebar - Desktop */}
+          <aside className="hidden lg:block w-[260px] flex-shrink-0">
+            <div className="sticky top-[130px]">
+              <ProductFilters categories={categories} onFilterChange={handleFilterChange} />
+            </div>
           </aside>
 
           {/* Products Section */}
           <div className="flex-1">
             {/* Toolbar */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-10 gap-3 sm:gap-4 pb-4 sm:pb-6 border-b border-[#ebebeb]">
-              <div className="flex items-center justify-between w-full sm:w-auto gap-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-3 sm:gap-4 pb-4 sm:pb-5 border-b border-[#ebebeb]">
+              <div className="flex items-center justify-between w-full  gap-3">
+                {/* Mobile Filter Toggle */}
                 <div className="lg:hidden">
                   <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#f6f6f6] text-[#000] text-[13px] sm:text-[14px] font-medium hover:bg-[#a749ff] hover:text-white transition-colors"
+                    className="flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 border border-[#ebebeb] text-[#000] text-[13px] sm:text-[14px] font-medium hover:border-[#a749ff] hover:text-[#a749ff] transition-colors"
                   >
+                    <SlidersHorizontal className="w-4 h-4" />
                     <span>Filters</span>
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`}
-                    />
+                    {totalActiveFilters > 0 && (
+                      <span className="w-5 h-5 bg-[#a749ff] text-white text-[11px] font-bold flex items-center justify-center rounded-full">
+                        {totalActiveFilters}
+                      </span>
+                    )}
                   </button>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <p className="text-[12px] sm:text-[14px] text-[#555]">
-                    {filteredProducts.length === 0
-                      ? 'No products found'
-                      : `${filteredProducts.length} results`}
-                  </p>
-                </div>
+                <p className="text-[13px] sm:text-[14px] text-[#555]">
+                  {filteredProducts.length === 0
+                    ? 'No products found'
+                    : `Showing ${startIndex + 1}-${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} results`}
+                </p>
 
-                <div className="flex items-center gap-2 sm:gap-4">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <div className="hidden sm:flex items-center border border-[#ebebeb]">
                     <button
                       onClick={() => setViewMode('grid')}
@@ -202,16 +225,54 @@ export default function ShopPage() {
               </div>
             </div>
 
+            {/* Active Filter Tags */}
+            {totalActiveFilters > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                <span className="text-[13px] text-[#555] mr-1">Active:</span>
+                {activeFilters.categories.map((c) => (
+                  <span key={c} className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#f6f6f6] text-[12px] text-[#333] font-medium">
+                    {c}
+                  </span>
+                ))}
+                {activeFilters.colors.map((c) => (
+                  <span key={c} className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#f6f6f6] text-[12px] text-[#333] font-medium">
+                    {c}
+                  </span>
+                ))}
+                {activeFilters.sizes.map((s) => (
+                  <span key={s} className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#f6f6f6] text-[12px] text-[#333] font-medium">
+                    Size: {s}
+                  </span>
+                ))}
+                {activeFilters.tags.map((t) => (
+                  <span key={t} className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#f6f6f6] text-[12px] text-[#333] font-medium">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+
             {/* Mobile Filters Panel */}
             {showFilters && (
-              <div className="lg:hidden mb-6 sm:mb-8 bg-[#f6f6f6] p-4 sm:p-6">
-                <ProductFilters categories={categories} onFilterChange={handleFilterChange} />
+              <div className="lg:hidden mb-6 sm:mb-8">
+                <div className="bg-[#f6f6f6] p-4 sm:p-6 relative">
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="absolute top-3 right-3 p-1 hover:text-[#a749ff] transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                  <ProductFilters categories={categories} onFilterChange={handleFilterChange} />
+                </div>
               </div>
             )}
 
             {/* Product Grid */}
             {filteredProducts.length === 0 ? (
               <div className="text-center py-20">
+                <div className="w-20 h-20 mx-auto mb-6 bg-[#f6f6f6] rounded-full flex items-center justify-center">
+                  <SlidersHorizontal className="w-8 h-8 text-[#999]" />
+                </div>
                 <p className="text-[18px] font-medium text-[#000] mb-2">No products found</p>
                 <p className="text-[14px] text-[#555] mb-6">
                   Try adjusting your search or filter to find what you&apos;re looking for.
@@ -229,7 +290,23 @@ export default function ShopPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-12 sm:mt-16">
+              <div className="flex items-center justify-center gap-2 mt-10 sm:mt-14">
+                <button
+                  onClick={() => {
+                    if (currentPage > 1) {
+                      setCurrentPage(currentPage - 1)
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
+                  }}
+                  disabled={currentPage === 1}
+                  className={`w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-[14px] font-medium transition-all duration-300 ${
+                    currentPage === 1
+                      ? 'bg-[#f6f6f6] text-[#ccc] cursor-not-allowed'
+                      : 'bg-[#f6f6f6] text-[#555] hover:bg-[#a749ff] hover:text-white'
+                  }`}
+                >
+                  &lsaquo;
+                </button>
                 {Array.from({ length: Math.min(totalPages, 10) }, (_, i) => i + 1).map(
                   (page) => (
                     <button
@@ -248,6 +325,22 @@ export default function ShopPage() {
                     </button>
                   )
                 )}
+                <button
+                  onClick={() => {
+                    if (currentPage < totalPages) {
+                      setCurrentPage(currentPage + 1)
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
+                  }}
+                  disabled={currentPage === totalPages}
+                  className={`w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-[14px] font-medium transition-all duration-300 ${
+                    currentPage === totalPages
+                      ? 'bg-[#f6f6f6] text-[#ccc] cursor-not-allowed'
+                      : 'bg-[#f6f6f6] text-[#555] hover:bg-[#a749ff] hover:text-white'
+                  }`}
+                >
+                  &rsaquo;
+                </button>
               </div>
             )}
           </div>
