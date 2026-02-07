@@ -63,27 +63,27 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
     <div className="min-h-screen bg-white">
       {/* Breadcrumb Header */}
       <div className="bg-[#f6f6f6]">
-        <div className="container mx-auto px-4 py-10 sm:py-14 text-center">
-          <h1 className="text-[24px] sm:text-[32px] font-bold text-[#000] mb-4 line-clamp-1">
+        <div className="container mx-auto px-4 py-6 sm:py-14 text-center">
+          <h1 className="text-[20px] sm:text-[32px] font-bold text-[#000] mb-2 sm:mb-4 line-clamp-1">
             {product.name}
           </h1>
-          <nav className="flex items-center justify-center gap-2 text-[14px]">
+          <nav className="flex items-center justify-center gap-2 text-[12px] sm:text-[14px]">
             <Link href="/" className="text-[#555] hover:text-[#a749ff] transition-colors">
               Home
             </Link>
-            <ChevronRight className="w-4 h-4 text-[#555]" />
+            <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-[#555]" />
             <Link href="/shop" className="text-[#555] hover:text-[#a749ff] transition-colors">
               Shop
             </Link>
-            <ChevronRight className="w-4 h-4 text-[#555]" />
-            <span className="text-[#a749ff]">{product.name}</span>
+            <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-[#555]" />
+            <span className="text-[#a749ff] truncate max-w-[120px] sm:max-w-none">{product.name}</span>
           </nav>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20">
+      <div className="container mx-auto px-4 py-6 sm:py-16 lg:py-20">
         {/* Product Details */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-16 sm:mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 mb-12 sm:mb-20">
           {/* Images */}
           <div>
             <ProductImageGallery
@@ -97,18 +97,18 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
           {/* Product Info */}
           <div>
-            <h2 className="text-[24px] sm:text-[28px] lg:text-[32px] font-bold text-[#000] mb-4">
+            <h2 className="text-[20px] sm:text-[28px] lg:text-[32px] font-bold text-[#000] mb-3 sm:mb-4">
               {product.name}
             </h2>
 
             {/* Rating */}
-            <div className="mb-4">
+            <div className="mb-3 sm:mb-4">
               <StarRating rating={product.rating} reviews={product.reviews} size="md" showCount />
             </div>
 
             {/* Price */}
-            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-[#ebebeb]">
-              <span className="text-[28px] font-bold text-[#a749ff]">
+            <div className="flex items-center gap-3 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-[#ebebeb]">
+              <span className="text-[24px] sm:text-[28px] font-bold text-[#a749ff]">
                 {formatPrice(product.price)}
               </span>
               {product.comparePrice && (
@@ -124,7 +124,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
             </div>
 
             {/* Description */}
-            <p className="text-[14px] sm:text-[15px] text-[#555] mb-8 leading-relaxed">
+            <p className="text-[13px] sm:text-[15px] text-[#555] mb-5 sm:mb-8 leading-relaxed">
               {product.description}
             </p>
 
@@ -243,12 +243,12 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
         {/* Description / Reviews / Shipping Tabs */}
         <div className="mb-16 sm:mb-20">
-          <div className="flex border-b border-[#ebebeb] mb-8 overflow-x-auto">
+          <div className="flex border-b border-[#ebebeb] mb-6 sm:mb-8 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`px-6 py-4 text-[14px] sm:text-[15px] font-medium whitespace-nowrap transition-colors border-b-2 -mb-[1px] ${
+                className={`px-4 sm:px-6 py-3 sm:py-4 text-[13px] sm:text-[15px] font-medium whitespace-nowrap transition-colors border-b-2 -mb-[1px] ${
                   activeTab === tab.key
                     ? 'text-[#a749ff] border-[#a749ff]'
                     : 'text-[#555] border-transparent hover:text-[#a749ff]'
@@ -299,9 +299,9 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
           {activeTab === 'reviews' && (
             <div className="max-w-3xl">
-              <div className="flex items-center gap-6 mb-8 pb-6 border-b border-[#ebebeb]">
-                <div className="text-center">
-                  <p className="text-[48px] font-bold text-[#000]">{product.rating}</p>
+              <div className="flex items-center gap-4 sm:gap-6 mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-[#ebebeb]">
+                <div className="text-center flex-shrink-0">
+                  <p className="text-[36px] sm:text-[48px] font-bold text-[#000]">{product.rating}</p>
                   <StarRating rating={product.rating} size="md" />
                   <p className="text-[13px] text-[#555] mt-1">{product.reviews} reviews</p>
                 </div>
@@ -377,9 +377,9 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <section>
-            <div className="text-center mb-10 sm:mb-12">
-              <h2 className="text-[28px] sm:text-[32px] font-bold text-[#000] mb-3">
+          <section className="pb-16 sm:pb-0">
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-[22px] sm:text-[32px] font-bold text-[#000] mb-3">
                 You May Also Like
               </h2>
               <p className="text-[14px] text-[#555]">
@@ -392,8 +392,8 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
       </div>
 
       {/* Sticky Mobile Add to Cart Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#ebebeb] p-4 z-40 sm:hidden">
-        <div className="flex items-center gap-3">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#ebebeb] px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] z-40 sm:hidden shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+        <div className="flex items-center gap-2">
           <div className="flex-1">
             <p className="text-[14px] font-bold text-[#a749ff]">{formatPrice(product.price)}</p>
             {product.comparePrice && (

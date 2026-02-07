@@ -15,8 +15,8 @@ export default function CartPage() {
       <div className="min-h-screen bg-white">
         {/* Breadcrumb */}
         <div className="bg-[#f6f6f6]">
-          <div className="container mx-auto px-4 py-16 sm:py-20 text-center">
-            <h1 className="text-[32px] sm:text-[40px] font-bold text-[#000] mb-4">Shopping Cart</h1>
+          <div className="container mx-auto px-4 py-8 sm:py-20 text-center">
+            <h1 className="text-[24px] sm:text-[40px] font-bold text-[#000] mb-3 sm:mb-4">Shopping Cart</h1>
             <nav className="flex items-center justify-center gap-2 text-[14px]">
               <Link href="/" className="text-[#555] hover:text-[#a749ff] transition-colors">
                 Home
@@ -27,8 +27,8 @@ export default function CartPage() {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 py-20 text-center">
-          <ShoppingBag className="w-24 h-24 text-[#d5d5d5] mx-auto mb-6" />
+        <div className="container mx-auto px-4 py-12 sm:py-20 text-center">
+          <ShoppingBag className="w-20 h-20 sm:w-24 sm:h-24 text-[#d5d5d5] mx-auto mb-6" />
           <h2 className="text-[28px] font-bold text-[#000] mb-4">
             Your cart is empty
           </h2>
@@ -47,8 +47,8 @@ export default function CartPage() {
     <div className="min-h-screen bg-white">
       {/* Breadcrumb Header */}
       <div className="bg-[#f6f6f6]">
-        <div className="container mx-auto px-4 py-16 sm:py-20 text-center">
-          <h1 className="text-[32px] sm:text-[40px] font-bold text-[#000] mb-4">Shopping Cart</h1>
+        <div className="container mx-auto px-4 py-8 sm:py-20 text-center">
+          <h1 className="text-[24px] sm:text-[40px] font-bold text-[#000] mb-3 sm:mb-4">Shopping Cart</h1>
           <nav className="flex items-center justify-center gap-2 text-[14px]">
             <Link href="/" className="text-[#555] hover:text-[#a749ff] transition-colors">
               Home
@@ -60,8 +60,8 @@ export default function CartPage() {
       </div>
 
       {/* Cart Content */}
-      <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+      <div className="container mx-auto px-4 py-6 sm:py-16 lg:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12">
           {/* Cart Items */}
           <div className="lg:col-span-2">
             {/* Cart Table Header - Desktop */}
@@ -182,8 +182,8 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-[#f6f6f6] p-6 sm:p-8 sticky top-36">
-              <h2 className="text-[20px] font-bold text-[#000] mb-6 pb-4 border-b border-[#ebebeb]">
+            <div className="bg-[#f6f6f6] p-5 sm:p-8 lg:sticky lg:top-28">
+              <h2 className="text-[18px] sm:text-[20px] font-bold text-[#000] mb-5 sm:mb-6 pb-4 border-b border-[#ebebeb]">
                 Cart Totals
               </h2>
 

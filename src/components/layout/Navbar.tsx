@@ -42,6 +42,18 @@ export default function Navbar() {
     setIsMobileMenuOpen(false)
   }, [])
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isMobileMenuOpen])
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchQuery.trim()) {
@@ -67,11 +79,11 @@ export default function Navbar() {
         {/* Top Bar */}
         <div className="bg-[#f6f6f6] border-b border-[#ebebeb]">
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between h-10 text-[13px]">
+            <div className="flex items-center justify-between h-9 sm:h-10 text-[13px]">
               <p className="text-[#555] hidden sm:block">
                 Free delivery on order over $100
               </p>
-              <p className="text-[#555] sm:hidden text-xs">
+              <p className="text-[#555] sm:hidden text-[11px]">
                 Free shipping $100+
               </p>
               <div className="flex items-center gap-4 sm:gap-6">
@@ -93,10 +105,10 @@ export default function Navbar() {
         {/* Main Navigation */}
         <nav className="border-b border-[#ebebeb]">
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between h-[70px] sm:h-[80px]">
+            <div className="flex items-center justify-between h-[56px] sm:h-[70px]">
               {/* Logo */}
               <Link href="/" className="flex-shrink-0">
-                <h1 className="text-[26px] sm:text-[30px] font-bold text-[#000] tracking-tight hover:text-[#a749ff] transition-colors">
+                <h1 className="text-[22px] sm:text-[28px] font-bold text-[#000] tracking-tight hover:text-[#a749ff] transition-colors">
                   Sellora
                 </h1>
               </Link>
@@ -150,11 +162,11 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Right Icons */}
-              <div className="flex items-center gap-1 sm:gap-2">
+              {/* Right Icons - bigger tap targets for mobile */}
+              <div className="flex items-center gap-0 sm:gap-1">
                 <button
                   onClick={() => setIsSearchOpen(!isSearchOpen)}
-                  className="p-2 hover:text-[#a749ff] transition-colors relative group"
+                  className="p-2.5 sm:p-2 hover:text-[#a749ff] transition-colors relative group"
                   aria-label="Search products"
                 >
                   <Search className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px] text-[#000] group-hover:text-[#a749ff]" />
@@ -162,7 +174,7 @@ export default function Navbar() {
 
                 <Link
                   href="/about"
-                  className="p-2 hover:text-[#a749ff] transition-colors relative group hidden sm:block"
+                  className="p-2.5 sm:p-2 hover:text-[#a749ff] transition-colors relative group hidden sm:block"
                   aria-label="About us"
                 >
                   <User className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px] text-[#000] group-hover:text-[#a749ff]" />
@@ -170,12 +182,12 @@ export default function Navbar() {
 
                 <Link
                   href="/wishlist"
-                  className="p-2 hover:text-[#a749ff] transition-colors relative group"
+                  className="p-2.5 sm:p-2 hover:text-[#a749ff] transition-colors relative group"
                   aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} items` : ''}`}
                 >
                   <Heart className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px] text-[#000] group-hover:text-[#a749ff]" />
                   {wishlistCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 bg-[#a749ff] text-white text-[10px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full font-medium">
+                    <span className="absolute top-0.5 right-0.5 sm:-top-0.5 sm:-right-0.5 bg-[#a749ff] text-white text-[10px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full font-medium">
                       {wishlistCount}
                     </span>
                   )}
@@ -183,12 +195,12 @@ export default function Navbar() {
 
                 <button
                   onClick={handleCartClick}
-                  className="p-2 hover:text-[#a749ff] transition-colors relative group"
+                  className="p-2.5 sm:p-2 hover:text-[#a749ff] transition-colors relative group"
                   aria-label={`Shopping cart${itemCount > 0 ? `, ${itemCount} items` : ''}`}
                 >
                   <ShoppingCart className="w-[20px] h-[20px] sm:w-[22px] sm:h-[22px] text-[#000] group-hover:text-[#a749ff]" />
                   {itemCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 bg-[#a749ff] text-white text-[10px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full font-medium">
+                    <span className="absolute top-0.5 right-0.5 sm:-top-0.5 sm:-right-0.5 bg-[#a749ff] text-white text-[10px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full font-medium">
                       {itemCount}
                     </span>
                   )}
@@ -196,7 +208,7 @@ export default function Navbar() {
 
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="p-2 hover:text-[#a749ff] transition-colors lg:hidden ml-1"
+                  className="p-2.5 sm:p-2 hover:text-[#a749ff] transition-colors lg:hidden ml-0.5"
                   aria-label="Toggle menu"
                   aria-expanded={isMobileMenuOpen}
                 >
@@ -225,11 +237,11 @@ export default function Navbar() {
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 pr-12 border border-[#ebebeb] focus:border-[#a749ff] focus:outline-none text-[15px] transition-colors"
+                  className="w-full px-4 py-3 pr-12 border border-[#ebebeb] focus:border-[#a749ff] focus:outline-none text-[16px] sm:text-[15px] transition-colors"
                 />
                 <button
                   type="submit"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-[#a749ff] transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-[#a749ff] transition-colors p-1"
                   aria-label="Submit search"
                 >
                   <Search className="w-5 h-5" />
@@ -241,37 +253,54 @@ export default function Navbar() {
           {/* Mobile Menu */}
           <div
             className={cn(
-              'lg:hidden absolute top-full left-0 right-0 bg-white border-b border-[#ebebeb] shadow-lg transition-all duration-300 overflow-hidden',
-              isMobileMenuOpen ? 'max-h-[80vh] overflow-y-auto' : 'max-h-0'
+              'lg:hidden fixed top-[92px] sm:top-[110px] left-0 right-0 bottom-0 bg-white transition-all duration-300 z-40',
+              isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
             )}
           >
-            <div className="container mx-auto px-4 py-4">
-              <div className="flex flex-col">
-                {NAV_LINKS.map((link) => (
-                  <div key={link.href}>
-                    <Link
-                      href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-[15px] font-medium text-[#000] hover:text-[#a749ff] py-3 border-b border-[#ebebeb] transition-colors block"
-                    >
-                      {link.label}
-                    </Link>
-                    {link.submenu && (
-                      <div className="pl-4 bg-[#f6f6f6]">
-                        {link.submenu.map((sub) => (
-                          <Link
-                            key={sub.href}
-                            href={sub.href}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="text-[14px] text-[#555] hover:text-[#a749ff] py-2.5 border-b border-[#ebebeb] last:border-b-0 transition-colors block"
-                          >
-                            {sub.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
+            <div className="h-full overflow-y-auto">
+              <div className="container mx-auto px-4 py-4">
+                <div className="flex flex-col">
+                  {NAV_LINKS.map((link) => (
+                    <div key={link.href}>
+                      <Link
+                        href={link.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="text-[15px] font-medium text-[#000] hover:text-[#a749ff] py-3.5 border-b border-[#ebebeb] transition-colors block"
+                      >
+                        {link.label}
+                      </Link>
+                      {link.submenu && (
+                        <div className="pl-4 bg-[#f6f6f6]">
+                          {link.submenu.map((sub) => (
+                            <Link
+                              key={sub.href}
+                              href={sub.href}
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className="text-[14px] text-[#555] hover:text-[#a749ff] py-3 border-b border-[#ebebeb] last:border-b-0 transition-colors block"
+                            >
+                              {sub.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  {/* Mobile-only links */}
+                  <Link
+                    href="/about"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-[15px] font-medium text-[#000] hover:text-[#a749ff] py-3.5 border-b border-[#ebebeb] transition-colors block sm:hidden"
+                  >
+                    About Us
+                  </Link>
+                  <Link
+                    href="/contact"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-[15px] font-medium text-[#000] hover:text-[#a749ff] py-3.5 border-b border-[#ebebeb] transition-colors block sm:hidden"
+                  >
+                    Contact Us
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -279,7 +308,7 @@ export default function Navbar() {
       </header>
 
       {/* Spacer for fixed header */}
-      <div className="h-[110px] sm:h-[120px]" />
+      <div className="h-[92px] sm:h-[110px]" />
 
       {/* Cart Drawer */}
       <CartDrawer isOpen={isCartDrawerOpen} onClose={() => setIsCartDrawerOpen(false)} />

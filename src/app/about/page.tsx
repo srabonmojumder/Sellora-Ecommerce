@@ -69,7 +69,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <div className="text-center bg-white p-6 sm:p-8 group hover:shadow-lg transition-shadow">
               <div className="w-16 h-16 bg-[#f6f6f6] group-hover:bg-[#a749ff] flex items-center justify-center mx-auto mb-5 transition-colors">
                 <Award className="w-7 h-7 text-[#a749ff] group-hover:text-white transition-colors" />

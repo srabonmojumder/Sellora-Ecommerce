@@ -118,8 +118,8 @@ export default function ShopPage() {
     <div className="min-h-screen bg-white">
       {/* Breadcrumb */}
       <div className="bg-[#f6f6f6]">
-        <div className="container mx-auto px-4 py-16 sm:py-20 text-center">
-          <h1 className="text-[32px] sm:text-[40px] font-bold text-[#000] mb-4">
+        <div className="container mx-auto px-4 py-8 sm:py-20 text-center">
+          <h1 className="text-[24px] sm:text-[40px] font-bold text-[#000] mb-3 sm:mb-4">
             {searchQuery ? `Results for "${searchQuery}"` : 'Shop'}
           </h1>
           <nav className="flex items-center justify-center gap-2 text-[14px]">
@@ -133,8 +133,8 @@ export default function ShopPage() {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+      <div className="container mx-auto px-4 py-6 sm:py-16 lg:py-20">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12">
           {/* Filters Sidebar */}
           <aside className="hidden lg:block w-[270px] flex-shrink-0">
             <ProductFilters categories={categories} onFilterChange={handleFilterChange} />
@@ -143,66 +143,68 @@ export default function ShopPage() {
           {/* Products Section */}
           <div className="flex-1">
             {/* Toolbar */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-10 gap-4 pb-6 border-b border-[#ebebeb]">
-              <div className="lg:hidden w-full sm:w-auto">
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#f6f6f6] text-[#000] text-[14px] font-medium hover:bg-[#a749ff] hover:text-white transition-colors"
-                >
-                  <span>Filters</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`}
-                  />
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <p className="text-[14px] text-[#555]">
-                  {filteredProducts.length === 0
-                    ? 'No products found'
-                    : `Showing ${startIndex + 1}-${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} results`}
-                </p>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="flex items-center border border-[#ebebeb]">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-10 gap-3 sm:gap-4 pb-4 sm:pb-6 border-b border-[#ebebeb]">
+              <div className="flex items-center justify-between w-full sm:w-auto gap-3">
+                <div className="lg:hidden">
                   <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2.5 transition-colors ${
-                      viewMode === 'grid'
-                        ? 'bg-[#a749ff] text-white'
-                        : 'bg-white text-[#555] hover:text-[#a749ff]'
-                    }`}
-                    aria-label="Grid view"
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#f6f6f6] text-[#000] text-[13px] sm:text-[14px] font-medium hover:bg-[#a749ff] hover:text-white transition-colors"
                   >
-                    <Grid className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2.5 transition-colors ${
-                      viewMode === 'list'
-                        ? 'bg-[#a749ff] text-white'
-                        : 'bg-white text-[#555] hover:text-[#a749ff]'
-                    }`}
-                    aria-label="List view"
-                  >
-                    <List className="w-4 h-4" />
+                    <span>Filters</span>
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`}
+                    />
                   </button>
                 </div>
 
-                <Select
-                  id="sort"
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as SortOption)}
-                  options={SORT_OPTIONS}
-                  className="w-[180px]"
-                />
+                <div className="flex items-center gap-2">
+                  <p className="text-[12px] sm:text-[14px] text-[#555]">
+                    {filteredProducts.length === 0
+                      ? 'No products found'
+                      : `${filteredProducts.length} results`}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 sm:gap-4">
+                  <div className="hidden sm:flex items-center border border-[#ebebeb]">
+                    <button
+                      onClick={() => setViewMode('grid')}
+                      className={`p-2.5 transition-colors ${
+                        viewMode === 'grid'
+                          ? 'bg-[#a749ff] text-white'
+                          : 'bg-white text-[#555] hover:text-[#a749ff]'
+                      }`}
+                      aria-label="Grid view"
+                    >
+                      <Grid className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setViewMode('list')}
+                      className={`p-2.5 transition-colors ${
+                        viewMode === 'list'
+                          ? 'bg-[#a749ff] text-white'
+                          : 'bg-white text-[#555] hover:text-[#a749ff]'
+                      }`}
+                      aria-label="List view"
+                    >
+                      <List className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <Select
+                    id="sort"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as SortOption)}
+                    options={SORT_OPTIONS}
+                    className="w-[140px] sm:w-[180px]"
+                  />
+                </div>
               </div>
             </div>
 
             {/* Mobile Filters Panel */}
             {showFilters && (
-              <div className="lg:hidden mb-8 bg-[#f6f6f6] p-6">
+              <div className="lg:hidden mb-6 sm:mb-8 bg-[#f6f6f6] p-4 sm:p-6">
                 <ProductFilters categories={categories} onFilterChange={handleFilterChange} />
               </div>
             )}

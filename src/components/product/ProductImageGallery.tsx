@@ -44,24 +44,24 @@ export default function ProductImageGallery({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* View Mode Switcher */}
-      <div className="flex items-center justify-between">
-        <div className="flex gap-2">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex gap-1.5 sm:gap-2 overflow-x-auto">
           <button
             onClick={() => setViewMode('zoom')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`px-3 sm:px-4 py-2 rounded-lg text-[12px] sm:text-sm font-medium transition-all whitespace-nowrap ${
               viewMode === 'zoom'
                 ? 'bg-neutral-900 text-white'
                 : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
             }`}
           >
-            <ImageIcon className="w-4 h-4 inline mr-2" />
-            Zoom View
+            <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" />
+            Zoom
           </button>
           <button
             onClick={() => setViewMode('carousel')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`px-3 sm:px-4 py-2 rounded-lg text-[12px] sm:text-sm font-medium transition-all whitespace-nowrap ${
               viewMode === 'carousel'
                 ? 'bg-neutral-900 text-white'
                 : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
@@ -72,25 +72,25 @@ export default function ProductImageGallery({
           {has360View && (
             <button
               onClick={() => setViewMode('360')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-[12px] sm:text-sm font-medium transition-all whitespace-nowrap ${
                 viewMode === '360'
                   ? 'bg-neutral-900 text-white'
                   : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
               }`}
             >
-              <RotateCw className="w-4 h-4 inline mr-2" />
-              360° View
+              <RotateCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" />
+              360°
             </button>
           )}
         </div>
 
         <button
           onClick={() => openLightbox(selectedImage)}
-          className="flex items-center gap-2 px-4 py-2 bg-neutral-100 hover:bg-neutral-200 rounded-lg text-sm font-medium text-neutral-900 transition-colors"
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-neutral-100 hover:bg-neutral-200 rounded-lg text-[12px] sm:text-sm font-medium text-neutral-900 transition-colors flex-shrink-0"
           aria-label="Open fullscreen gallery"
         >
-          <Maximize2 className="w-4 h-4" />
-          Fullscreen
+          <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="hidden sm:inline">Fullscreen</span>
         </button>
       </div>
 
@@ -119,7 +119,7 @@ export default function ProductImageGallery({
 
           {/* Thumbnails */}
           {images.length > 1 && (
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-4 gap-2 sm:gap-4">
               {images.map((image, index) => (
                 <button
                   key={index}

@@ -9,7 +9,14 @@
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 140px;
+    scroll-padding-top: 100px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (min-width: 640px) {
+    html {
+      scroll-padding-top: 120px;
+    }
   }
 
   body {

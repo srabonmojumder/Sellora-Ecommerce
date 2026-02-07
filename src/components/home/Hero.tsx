@@ -11,7 +11,7 @@ const heroSlides = [
     subtitle: 'New Arrivals',
     title: 'Big Sale',
     highlight: '30% Off',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas ullam rem aut amet sequi.',
+    description: 'Discover the latest trends with unbeatable deals. Premium fashion at prices you will love.',
     buttonText: 'Shop Now',
     buttonLink: '/shop',
     image: '/images/hero/slider-1.jpg',
@@ -22,7 +22,7 @@ const heroSlides = [
     subtitle: 'Spring Collection',
     title: 'New Season',
     highlight: 'Sale 50%',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas ullam rem aut amet sequi.',
+    description: 'Refresh your wardrobe with our curated spring collection. Style meets comfort.',
     buttonText: 'Shop Now',
     buttonLink: '/shop',
     image: '/images/hero/slider-2.jpg',
@@ -33,7 +33,7 @@ const heroSlides = [
     subtitle: 'Summer Collection',
     title: 'Hot Deals',
     highlight: 'Up to 70%',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas ullam rem aut amet sequi.',
+    description: 'Get ready for summer with exclusive deals on trending styles and must-have pieces.',
     buttonText: 'Shop Now',
     buttonLink: '/shop',
     image: '/images/hero/slider-3.jpg',
@@ -75,7 +75,7 @@ export default function Hero() {
   return (
     <section className="relative w-full overflow-hidden">
       {/* Slides Container */}
-      <div className="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px]">
+      <div className="relative h-[320px] sm:h-[420px] md:h-[520px] lg:h-[600px]">
         {heroSlides.map((slide, index) => (
           <div
             key={slide.id}
@@ -84,12 +84,25 @@ export default function Hero() {
             }`}
             style={{ backgroundColor: slide.bgColor }}
           >
-            <div className="container mx-auto px-4 h-full">
-              <div className="grid lg:grid-cols-2 gap-8 items-center h-full">
-                {/* Text Content */}
-                <div className="flex flex-col justify-center order-2 lg:order-1 text-center lg:text-left py-8 lg:py-0">
+            {/* Background Image with Overlay */}
+            <div className="absolute inset-0">
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority={index === 0}
+              />
+              <div className="absolute inset-0 bg-black/30 sm:bg-black/20" />
+            </div>
+
+            <div className="container mx-auto px-4 h-full relative z-10">
+              <div className="flex items-center h-full">
+                {/* Text Content - Full width on mobile, centered */}
+                <div className="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left py-6 sm:py-8">
                   <span
-                    className={`text-[14px] sm:text-[16px] text-[#555] uppercase tracking-[3px] mb-2 sm:mb-4 transition-all duration-500 delay-100 ${
+                    className={`text-[12px] sm:text-[14px] md:text-[16px] text-white/90 uppercase tracking-[2px] sm:tracking-[3px] mb-2 sm:mb-3 transition-all duration-500 delay-100 ${
                       index === currentSlide
                         ? 'translate-y-0 opacity-100'
                         : 'translate-y-8 opacity-0'
@@ -99,7 +112,7 @@ export default function Hero() {
                   </span>
 
                   <h1
-                    className={`text-[36px] sm:text-[48px] md:text-[60px] lg:text-[72px] font-bold text-[#000] leading-tight mb-2 sm:mb-4 transition-all duration-500 delay-200 ${
+                    className={`text-[28px] sm:text-[40px] md:text-[52px] lg:text-[64px] font-bold text-white leading-tight mb-1 sm:mb-3 transition-all duration-500 delay-200 ${
                       index === currentSlide
                         ? 'translate-y-0 opacity-100'
                         : 'translate-y-8 opacity-0'
@@ -109,7 +122,7 @@ export default function Hero() {
                   </h1>
 
                   <span
-                    className={`text-[28px] sm:text-[36px] md:text-[48px] font-bold text-[#a749ff] mb-4 sm:mb-6 transition-all duration-500 delay-300 ${
+                    className={`text-[22px] sm:text-[30px] md:text-[40px] font-bold text-[#a749ff] mb-3 sm:mb-4 drop-shadow-lg transition-all duration-500 delay-300 ${
                       index === currentSlide
                         ? 'translate-y-0 opacity-100'
                         : 'translate-y-8 opacity-0'
@@ -119,7 +132,7 @@ export default function Hero() {
                   </span>
 
                   <p
-                    className={`text-[14px] sm:text-[16px] text-[#555] mb-6 sm:mb-8 max-w-md mx-auto lg:mx-0 transition-all duration-500 delay-400 ${
+                    className={`text-[13px] sm:text-[15px] text-white/80 mb-5 sm:mb-7 max-w-sm mx-auto lg:mx-0 leading-relaxed hidden sm:block transition-all duration-500 delay-400 ${
                       index === currentSlide
                         ? 'translate-y-0 opacity-100'
                         : 'translate-y-8 opacity-0'
@@ -137,33 +150,10 @@ export default function Hero() {
                   >
                     <Link
                       href={slide.buttonLink}
-                      className="inline-block bg-[#a749ff] text-white px-8 sm:px-10 py-3 sm:py-4 text-[14px] sm:text-[16px] font-semibold uppercase tracking-wider hover:bg-[#000] transition-all duration-300"
+                      className="inline-block bg-[#a749ff] text-white px-7 sm:px-10 py-2.5 sm:py-3.5 text-[13px] sm:text-[15px] font-semibold uppercase tracking-wider hover:bg-[#000] transition-all duration-300"
                     >
                       {slide.buttonText}
                     </Link>
-                  </div>
-                </div>
-
-                {/* Image */}
-                <div className="relative h-[200px] sm:h-[300px] lg:h-full order-1 lg:order-2 flex items-center justify-center">
-                  <div
-                    className={`relative w-full h-full transition-all duration-500 ${
-                      index === currentSlide
-                        ? 'scale-100 opacity-100'
-                        : 'scale-95 opacity-0'
-                    }`}
-                  >
-                    {/* Placeholder for hero image - using gradient background */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="relative w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]">
-                        <div className="w-full h-full bg-gradient-to-br from-[#a749ff]/20 to-[#a749ff]/5 rounded-full flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="text-[60px] sm:text-[80px] md:text-[100px] mb-2 sm:mb-4">🛍️</div>
-                            <p className="text-[#555] text-[12px] sm:text-[14px]">Hero Image {index + 1}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -175,7 +165,7 @@ export default function Hero() {
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-2 sm:left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/80 hover:bg-[#a749ff] text-[#333] hover:text-white flex items-center justify-center transition-all duration-300 group"
+        className="absolute left-3 sm:left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/80 hover:bg-[#a749ff] text-[#333] hover:text-white flex items-center justify-center transition-all duration-300 rounded-full"
         aria-label="Previous slide"
       >
         <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -183,7 +173,7 @@ export default function Hero() {
 
       <button
         onClick={nextSlide}
-        className="absolute right-2 sm:right-4 lg:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/80 hover:bg-[#a749ff] text-[#333] hover:text-white flex items-center justify-center transition-all duration-300 group"
+        className="absolute right-3 sm:right-4 lg:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/80 hover:bg-[#a749ff] text-[#333] hover:text-white flex items-center justify-center transition-all duration-300 rounded-full"
         aria-label="Next slide"
       >
         <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -195,10 +185,10 @@ export default function Hero() {
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
+            className={`h-2.5 sm:h-3 rounded-full transition-all duration-300 ${
               index === currentSlide
-                ? 'bg-[#a749ff] w-6 sm:w-8'
-                : 'bg-[#ccc] hover:bg-[#a749ff]'
+                ? 'bg-[#a749ff] w-7 sm:w-8'
+                : 'bg-white/70 w-2.5 sm:w-3 hover:bg-[#a749ff]'
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />

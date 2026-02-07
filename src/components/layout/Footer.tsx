@@ -40,7 +40,7 @@ export default function Footer() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="flex-1 px-5 py-3.5 text-[14px] text-[#333] bg-white border-none focus:outline-none focus:ring-2 focus:ring-white/50 min-w-0 sm:min-w-[280px]"
+                  className="flex-1 px-4 sm:px-5 py-3.5 text-[16px] sm:text-[14px] text-[#333] bg-white border-none focus:outline-none focus:ring-2 focus:ring-white/50 min-w-0 sm:min-w-[280px]"
                 />
                 <button
                   type="submit"

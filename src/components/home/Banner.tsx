@@ -55,11 +55,13 @@ export default function Banner({
             </Link>
           </div>
 
-          {/* Image Placeholder */}
+          {/* Decorative Visual */}
           <div className="flex-1 flex items-center justify-center">
-            <div className="relative w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] lg:w-[320px] lg:h-[320px]">
-              <div className="w-full h-full bg-gradient-to-br from-[#a749ff]/10 to-[#a749ff]/5 rounded-full flex items-center justify-center">
-                <div className="text-[60px] sm:text-[80px]">🛒</div>
+            <div className="relative w-[140px] h-[140px] sm:w-[280px] sm:h-[280px] lg:w-[320px] lg:h-[320px]">
+              <div className="w-full h-full bg-gradient-to-br from-[#a749ff]/20 to-[#a749ff]/5 rounded-full flex items-center justify-center">
+                <div className="w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-[#a749ff]/30 via-[#d896ff]/20 to-transparent flex items-center justify-center">
+                  <div className="w-[55%] h-[55%] rounded-full bg-gradient-to-br from-[#a749ff]/40 to-[#e2b0ff]/10" />
+                </div>
               </div>
             </div>
           </div>
@@ -80,31 +82,37 @@ interface ImageBannerProps {
 }
 
 export function ImageBannerGrid({ items }: ImageBannerProps) {
+  const gradients = [
+    'from-[#ec4899]/30 via-[#a749ff]/20 to-transparent',
+    'from-[#3b82f6]/30 via-[#a749ff]/20 to-transparent',
+    'from-[#f59e0b]/30 via-[#a749ff]/20 to-transparent',
+  ]
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
       {items.map((item, index) => (
         <Link
           key={index}
           href={item.link}
-          className="group relative overflow-hidden min-h-[200px] sm:min-h-[280px]"
+          className={`group relative overflow-hidden min-h-[160px] sm:min-h-[280px] ${index === 2 ? 'col-span-2 lg:col-span-1' : ''}`}
           style={{ backgroundColor: item.bgColor }}
         >
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-6 text-center">
             {item.subtitle && (
-              <span className="text-[12px] sm:text-[13px] text-[#555] uppercase tracking-[2px] mb-2">
+              <span className="text-[10px] sm:text-[13px] text-[#555] uppercase tracking-[1px] sm:tracking-[2px] mb-1 sm:mb-2">
                 {item.subtitle}
               </span>
             )}
-            <h3 className="text-[22px] sm:text-[26px] font-bold text-[#000] mb-4 group-hover:text-[#a749ff] transition-colors">
+            <h3 className="text-[18px] sm:text-[26px] font-bold text-[#000] mb-2 sm:mb-4 group-hover:text-[#a749ff] transition-colors">
               {item.title}
             </h3>
-            <span className="text-[13px] font-medium text-[#000] uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#000] group-hover:text-[#a749ff] group-hover:after:bg-[#a749ff] transition-colors">
+            <span className="text-[11px] sm:text-[13px] font-medium text-[#000] uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#000] group-hover:text-[#a749ff] group-hover:after:bg-[#a749ff] transition-colors">
               Shop Now
             </span>
           </div>
-          {/* Decorative element */}
-          <div className="absolute bottom-4 right-4 text-[50px] sm:text-[60px] opacity-20 group-hover:opacity-30 transition-opacity">
-            {index === 0 ? '👗' : index === 1 ? '👔' : '👜'}
+          {/* Decorative gradient circle */}
+          <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] opacity-30 group-hover:opacity-50 transition-opacity">
+            <div className={`w-full h-full rounded-full bg-gradient-to-tr ${gradients[index] || gradients[0]}`} />
           </div>
         </Link>
       ))}
@@ -184,19 +192,19 @@ interface FeatureBannerProps {
 
 export function FeatureBanner({ features }: FeatureBannerProps) {
   return (
-    <div className="bg-white border-t border-b border-[#ebebeb] py-10 sm:py-12 lg:py-16">
+    <div className="bg-white border-t border-b border-[#ebebeb] py-6 sm:py-12 lg:py-16">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {features.map((feature, index) => (
-            <div key={index} className="flex items-center gap-4 group">
-              <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 bg-[#f6f6f6] flex items-center justify-center text-[#a749ff] group-hover:bg-[#a749ff] group-hover:text-white transition-all duration-300">
+            <div key={index} className="flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-4 group text-center sm:text-left">
+              <div className="flex-shrink-0 w-11 h-11 sm:w-16 sm:h-16 bg-[#f6f6f6] flex items-center justify-center text-[#a749ff] group-hover:bg-[#a749ff] group-hover:text-white transition-all duration-300">
                 {feature.icon}
               </div>
               <div>
-                <h4 className="text-[15px] sm:text-[16px] font-semibold text-[#000] mb-1">
+                <h4 className="text-[13px] sm:text-[16px] font-semibold text-[#000] mb-0.5 sm:mb-1">
                   {feature.title}
                 </h4>
-                <p className="text-[13px] text-[#555]">{feature.description}</p>
+                <p className="text-[11px] sm:text-[13px] text-[#555] hidden sm:block">{feature.description}</p>
               </div>
             </div>
           ))}

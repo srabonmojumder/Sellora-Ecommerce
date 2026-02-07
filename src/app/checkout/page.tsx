@@ -110,8 +110,8 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-white">
       {/* Breadcrumb Header */}
       <div className="bg-[#f6f6f6]">
-        <div className="container mx-auto px-4 py-16 sm:py-20 text-center">
-          <h1 className="text-[32px] sm:text-[40px] font-bold text-[#000] mb-4">Checkout</h1>
+        <div className="container mx-auto px-4 py-6 sm:py-20 text-center">
+          <h1 className="text-[24px] sm:text-[40px] font-bold text-[#000] mb-3 sm:mb-4">Checkout</h1>
           <nav className="flex items-center justify-center gap-2 text-[14px]">
             <Link href="/" className="text-[#555] hover:text-[#a749ff] transition-colors">
               Home
@@ -158,24 +158,24 @@ export default function CheckoutPage() {
       </div>
 
       {/* Checkout Content */}
-      <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20">
+      <div className="container mx-auto px-4 py-6 sm:py-16 lg:py-20">
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12">
             {/* Checkout Form */}
             <div className="lg:col-span-2 space-y-8">
               {/* Shipping Information */}
               {step === 1 && (
-                <div className="border border-[#ebebeb] p-6 sm:p-8">
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#ebebeb]">
-                    <div className="w-10 h-10 bg-[#a749ff] flex items-center justify-center text-white">
-                      <Truck className="w-5 h-5" />
+                <div className="border border-[#ebebeb] p-4 sm:p-8">
+                  <div className="flex items-center gap-3 mb-5 sm:mb-6 pb-4 border-b border-[#ebebeb]">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#a749ff] flex items-center justify-center text-white flex-shrink-0">
+                      <Truck className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <h2 className="text-[20px] font-bold text-[#000]">
+                    <h2 className="text-[17px] sm:text-[20px] font-bold text-[#000]">
                       Shipping Information
                     </h2>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Input
                       label="First Name *"
                       name="firstName"
@@ -210,7 +210,7 @@ export default function CheckoutPage() {
                       error={errors.phone}
                       placeholder="+1 (555) 000-0000"
                     />
-                    <div className="md:col-span-2">
+                    <div className="sm:col-span-2">
                       <Input
                         label="Address *"
                         name="address"
@@ -257,7 +257,7 @@ export default function CheckoutPage() {
                       type="button"
                       size="lg"
                       onClick={handleContinueToPayment}
-                      className="w-full md:w-auto"
+                      className="w-full sm:w-auto"
                     >
                       Continue to Payment
                     </Button>
@@ -335,12 +335,12 @@ export default function CheckoutPage() {
 
             {/* Order Summary */}
             <div className="lg:col-span-1">
-              <div className="bg-[#f6f6f6] p-6 sm:p-8 sticky top-36">
-                <h2 className="text-[20px] font-bold text-[#000] mb-6 pb-4 border-b border-[#ebebeb]">
+              <div className="bg-[#f6f6f6] p-5 sm:p-8 lg:sticky lg:top-28">
+                <h2 className="text-[18px] sm:text-[20px] font-bold text-[#000] mb-5 sm:mb-6 pb-4 border-b border-[#ebebeb]">
                   Your Order
                 </h2>
 
-                <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
+                <div className="space-y-4 mb-6 max-h-48 sm:max-h-64 overflow-y-auto">
                   {items.map((item) => (
                     <div key={item.id} className="flex gap-4">
                       <div className="relative w-16 h-16 bg-white flex-shrink-0 overflow-hidden">

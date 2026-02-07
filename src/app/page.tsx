@@ -179,18 +179,18 @@ export default function HomePage() {
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4">
           {/* Section Header */}
-          <div className="text-center mb-10 sm:mb-12 lg:mb-14">
-            <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold text-[#000] mb-3">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-14">
+            <h2 className="text-[24px] sm:text-[32px] lg:text-[36px] font-bold text-[#000] mb-2 sm:mb-3">
               Featured Products
             </h2>
-            <p className="text-[14px] sm:text-[15px] text-[#555] max-w-xl mx-auto">
+            <p className="text-[13px] sm:text-[15px] text-[#555] max-w-xl mx-auto px-2">
               Discover handpicked selections curated by our stylists. From fresh arrivals to
               top-rated favorites, find exactly what you are looking for.
             </p>
           </div>
 
           {/* Product Tabs - Functional */}
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-10 sm:mb-12">
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-6 mb-8 sm:mb-12">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
@@ -222,24 +222,24 @@ export default function HomePage() {
 
       {/* Big Banner - Sale */}
       <section className="relative bg-[#f1f1f1] overflow-hidden">
-        <div className="container mx-auto px-4 py-16 sm:py-20 lg:py-24">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
+        <div className="container mx-auto px-4 py-10 sm:py-20 lg:py-24">
+          <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 items-center">
             {/* Text Content */}
             <div className="text-center lg:text-left order-2 lg:order-1">
-              <span className="text-[13px] sm:text-[14px] text-[#555] uppercase tracking-[3px] mb-3 block">
+              <span className="text-[12px] sm:text-[14px] text-[#555] uppercase tracking-[2px] sm:tracking-[3px] mb-2 sm:mb-3 block">
                 Deal Of The Day
               </span>
-              <h2 className="text-[36px] sm:text-[48px] lg:text-[56px] font-bold text-[#000] mb-4 leading-tight">
+              <h2 className="text-[28px] sm:text-[48px] lg:text-[56px] font-bold text-[#000] mb-3 sm:mb-4 leading-tight">
                 Big Sale
                 <span className="block text-[#a749ff]">50% Off</span>
               </h2>
-              <p className="text-[14px] sm:text-[15px] text-[#555] mb-6 sm:mb-8 max-w-md mx-auto lg:mx-0">
+              <p className="text-[13px] sm:text-[15px] text-[#555] mb-5 sm:mb-8 max-w-md mx-auto lg:mx-0">
                 Do not miss out on our biggest sale of the season. Premium brands at unbeatable
                 prices. Limited stock available — shop now before it is gone.
               </p>
 
               {/* Live Countdown */}
-              <div className="flex justify-center lg:justify-start gap-3 sm:gap-4 mb-8">
+              <div className="flex justify-center lg:justify-start gap-2.5 sm:gap-4 mb-6 sm:mb-8">
                 {[
                   { value: mounted ? padZero(timeLeft.days) : '00', label: 'Days' },
                   { value: mounted ? padZero(timeLeft.hours) : '00', label: 'Hours' },
@@ -247,8 +247,8 @@ export default function HomePage() {
                   { value: mounted ? padZero(timeLeft.seconds) : '00', label: 'Secs' },
                 ].map((item, index) => (
                   <div key={index} className="text-center">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white flex items-center justify-center mb-1">
-                      <span className="text-[22px] sm:text-[26px] font-bold text-[#000]">
+                    <div className="w-[52px] h-[52px] sm:w-16 sm:h-16 bg-white flex items-center justify-center mb-1">
+                      <span className="text-[20px] sm:text-[26px] font-bold text-[#000]">
                         {item.value}
                       </span>
                     </div>
@@ -261,15 +261,15 @@ export default function HomePage() {
 
               <Link
                 href="/shop?filter=sale"
-                className="inline-block bg-[#a749ff] text-white px-10 sm:px-12 py-3.5 sm:py-4 text-[13px] sm:text-[14px] font-semibold uppercase tracking-wider hover:bg-[#000] transition-all duration-300"
+                className="inline-block bg-[#a749ff] text-white px-8 sm:px-12 py-3 sm:py-4 text-[13px] sm:text-[14px] font-semibold uppercase tracking-wider hover:bg-[#000] transition-all duration-300"
               >
                 Shop Now
               </Link>
             </div>
 
-            {/* Gradient Visual (replaces emoji placeholder) */}
+            {/* Gradient Visual */}
             <div className="order-1 lg:order-2 flex justify-center">
-              <div className="relative w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] lg:w-[450px] lg:h-[450px]">
+              <div className="relative w-[180px] h-[180px] sm:w-[350px] sm:h-[350px] lg:w-[450px] lg:h-[450px]">
                 <div className="w-full h-full bg-gradient-to-br from-[#a749ff]/20 to-[#a749ff]/5 rounded-full flex items-center justify-center">
                   <div className="w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-[#a749ff]/30 via-[#d896ff]/20 to-transparent flex items-center justify-center">
                     <div className="w-[55%] h-[55%] rounded-full bg-gradient-to-br from-[#a749ff]/40 to-[#e2b0ff]/10" />
@@ -284,11 +284,11 @@ export default function HomePage() {
       {/* New Arrivals Section */}
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-10 sm:mb-12 lg:mb-14">
-            <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold text-[#000] mb-3">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-14">
+            <h2 className="text-[24px] sm:text-[32px] lg:text-[36px] font-bold text-[#000] mb-2 sm:mb-3">
               New Arrivals
             </h2>
-            <p className="text-[14px] sm:text-[15px] text-[#555] max-w-xl mx-auto">
+            <p className="text-[13px] sm:text-[15px] text-[#555] max-w-xl mx-auto px-2">
               Be the first to explore our latest additions. Fresh styles just landed for the
               upcoming season.
             </p>
@@ -304,25 +304,25 @@ export default function HomePage() {
       {/* Two Column Banner */}
       <section className="bg-white">
         <div className="container mx-auto px-4">
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6">
             {/* Banner 1 - Women */}
             <Link
               href="/shop?category=women"
-              className="group relative bg-[#f5f5f5] min-h-[250px] sm:min-h-[350px] overflow-hidden flex items-center"
+              className="group relative bg-[#f5f5f5] min-h-[180px] sm:min-h-[350px] overflow-hidden flex items-center"
             >
-              <div className="relative z-10 p-6 sm:p-10">
-                <span className="text-[12px] sm:text-[13px] text-[#555] uppercase tracking-[2px] mb-2 block">
+              <div className="relative z-10 p-4 sm:p-10">
+                <span className="text-[10px] sm:text-[13px] text-[#555] uppercase tracking-[1px] sm:tracking-[2px] mb-1 sm:mb-2 block">
                   New Season
                 </span>
-                <h3 className="text-[24px] sm:text-[32px] font-bold text-[#000] mb-4 group-hover:text-[#a749ff] transition-colors">
+                <h3 className="text-[16px] sm:text-[32px] font-bold text-[#000] mb-2 sm:mb-4 group-hover:text-[#a749ff] transition-colors">
                   Women Collection
                 </h3>
-                <span className="text-[13px] font-medium text-[#000] uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#000] group-hover:text-[#a749ff] group-hover:after:bg-[#a749ff] transition-colors">
+                <span className="text-[11px] sm:text-[13px] font-medium text-[#000] uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#000] group-hover:text-[#a749ff] group-hover:after:bg-[#a749ff] transition-colors">
                   Shop Now
                 </span>
               </div>
-              {/* Decorative gradient shape (replaces emoji) */}
-              <div className="absolute right-4 bottom-4 w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] opacity-10 group-hover:opacity-20 transition-opacity">
+              {/* Decorative gradient shape */}
+              <div className="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 w-[50px] h-[50px] sm:w-[100px] sm:h-[100px] opacity-10 group-hover:opacity-20 transition-opacity">
                 <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#ec4899] via-[#a749ff] to-[#f472b6]" />
               </div>
             </Link>
@@ -330,21 +330,21 @@ export default function HomePage() {
             {/* Banner 2 - Men */}
             <Link
               href="/shop?category=men"
-              className="group relative bg-[#f1f1f1] min-h-[250px] sm:min-h-[350px] overflow-hidden flex items-center"
+              className="group relative bg-[#f1f1f1] min-h-[180px] sm:min-h-[350px] overflow-hidden flex items-center"
             >
-              <div className="relative z-10 p-6 sm:p-10">
-                <span className="text-[12px] sm:text-[13px] text-[#555] uppercase tracking-[2px] mb-2 block">
+              <div className="relative z-10 p-4 sm:p-10">
+                <span className="text-[10px] sm:text-[13px] text-[#555] uppercase tracking-[1px] sm:tracking-[2px] mb-1 sm:mb-2 block">
                   New Season
                 </span>
-                <h3 className="text-[24px] sm:text-[32px] font-bold text-[#000] mb-4 group-hover:text-[#a749ff] transition-colors">
+                <h3 className="text-[16px] sm:text-[32px] font-bold text-[#000] mb-2 sm:mb-4 group-hover:text-[#a749ff] transition-colors">
                   Men Collection
                 </h3>
-                <span className="text-[13px] font-medium text-[#000] uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#000] group-hover:text-[#a749ff] group-hover:after:bg-[#a749ff] transition-colors">
+                <span className="text-[11px] sm:text-[13px] font-medium text-[#000] uppercase tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#000] group-hover:text-[#a749ff] group-hover:after:bg-[#a749ff] transition-colors">
                   Shop Now
                 </span>
               </div>
-              {/* Decorative gradient shape (replaces emoji) */}
-              <div className="absolute right-4 bottom-4 w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] opacity-10 group-hover:opacity-20 transition-opacity">
+              {/* Decorative gradient shape */}
+              <div className="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 w-[50px] h-[50px] sm:w-[100px] sm:h-[100px] opacity-10 group-hover:opacity-20 transition-opacity">
                 <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#3b82f6] via-[#a749ff] to-[#6366f1]" />
               </div>
             </Link>
@@ -355,11 +355,11 @@ export default function HomePage() {
       {/* Best Sellers Section */}
       <section className="py-12 sm:py-16 lg:py-20 bg-[#f6f6f6]">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-10 sm:mb-12 lg:mb-14">
-            <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold text-[#000] mb-3">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-14">
+            <h2 className="text-[24px] sm:text-[32px] lg:text-[36px] font-bold text-[#000] mb-2 sm:mb-3">
               Best Sellers
             </h2>
-            <p className="text-[14px] sm:text-[15px] text-[#555] max-w-xl mx-auto">
+            <p className="text-[13px] sm:text-[15px] text-[#555] max-w-xl mx-auto px-2">
               Our most popular products loved by thousands of customers. See what everyone is
               adding to their carts.
             </p>
@@ -375,21 +375,21 @@ export default function HomePage() {
       {/* Blog/News Section Preview */}
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-10 sm:mb-12 lg:mb-14">
-            <h2 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold text-[#000] mb-3">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-14">
+            <h2 className="text-[24px] sm:text-[32px] lg:text-[36px] font-bold text-[#000] mb-2 sm:mb-3">
               Our Blog
             </h2>
-            <p className="text-[14px] sm:text-[15px] text-[#555] max-w-xl mx-auto">
+            <p className="text-[13px] sm:text-[15px] text-[#555] max-w-xl mx-auto px-2">
               Style guides, trend reports, and tips from our fashion experts to keep you inspired.
             </p>
           </div>
 
           {/* Blog Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {blogPosts.map((post) => (
               <article key={post.id} className="group">
-                {/* Gradient Thumbnail (replaces emoji placeholder) */}
-                <Link href={`/blog/post-${post.id}`} className="block mb-4 sm:mb-5 overflow-hidden">
+                {/* Gradient Thumbnail */}
+                <Link href={`/blog/post-${post.id}`} className="block mb-3 sm:mb-5 overflow-hidden">
                   <div className="relative aspect-[16/10] bg-[#f6f6f6] overflow-hidden">
                     <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-500">
                       <div
@@ -434,12 +434,12 @@ export default function HomePage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[18px] sm:text-[20px] font-semibold text-[#000] group-hover:text-[#a749ff] transition-colors mb-3 line-clamp-2">
+                <h3 className="text-[16px] sm:text-[20px] font-semibold text-[#000] group-hover:text-[#a749ff] transition-colors mb-2 sm:mb-3 line-clamp-2">
                   <Link href={`/blog/post-${post.id}`}>{post.title}</Link>
                 </h3>
 
                 {/* Excerpt */}
-                <p className="text-[14px] text-[#555] line-clamp-2 mb-4">{post.excerpt}</p>
+                <p className="text-[13px] sm:text-[14px] text-[#555] line-clamp-2 mb-3 sm:mb-4">{post.excerpt}</p>
 
                 {/* Read More */}
                 <Link

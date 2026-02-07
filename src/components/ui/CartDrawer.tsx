@@ -39,12 +39,12 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-full max-w-[400px] bg-white z-50 shadow-2xl transition-transform duration-300 flex flex-col ${
+        className={`fixed top-0 right-0 h-full w-full sm:max-w-[400px] bg-white z-50 shadow-2xl transition-transform duration-300 flex flex-col ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#ebebeb]">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-[#ebebeb]">
           <h2 className="text-[18px] font-bold text-[#000]">
             Shopping Cart ({itemCount})
           </h2>
@@ -71,10 +71,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </div>
         ) : (
           <>
-            <div className="flex-1 overflow-y-auto px-6 py-4">
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4">
               <div className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.id} className="flex gap-4 pb-4 border-b border-[#ebebeb]">
+                  <div key={item.id} className="flex gap-3 sm:gap-4 pb-4 border-b border-[#ebebeb]">
                     <div className="relative w-20 h-20 bg-[#f6f6f6] flex-shrink-0 overflow-hidden">
                       <Image
                         src={item.product.images[0]}
@@ -102,7 +102,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <div className="flex items-center border border-[#ebebeb]">
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="w-7 h-7 flex items-center justify-center text-[#555] hover:text-[#a749ff] transition-colors"
+                            className="w-8 h-8 flex items-center justify-center text-[#555] hover:text-[#a749ff] transition-colors"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
@@ -111,7 +111,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="w-7 h-7 flex items-center justify-center text-[#555] hover:text-[#a749ff] transition-colors"
+                            className="w-8 h-8 flex items-center justify-center text-[#555] hover:text-[#a749ff] transition-colors"
                           >
                             <Plus className="w-3 h-3" />
                           </button>
@@ -134,7 +134,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-[#ebebeb] px-6 py-4 space-y-4">
+            <div className="border-t border-[#ebebeb] px-4 sm:px-6 py-4 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-[16px] font-bold text-[#000]">Subtotal</span>
                 <span className="text-[18px] font-bold text-[#a749ff]">
